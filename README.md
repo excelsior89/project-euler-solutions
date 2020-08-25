@@ -19,7 +19,8 @@ Just running the problem displays the problem statement (from the Project Euler 
 The profiling system is fairly simplistic: the general problem is run repeatedly with a sample input (typically the same as the specific case in the problem statement, but sometimes different). These runs are timed and an average time-per-run is determined. Where multiple solution methods have been implemented for the problem, each method is profiled separately.
 
 ### Example
-```Pick a problem (1-700, enter 0 to exit): 1
+```
+Pick a problem (1-700, enter 0 to exit): 1
 Do profiling? Y/N: N
 Profiling will not be used.
 
