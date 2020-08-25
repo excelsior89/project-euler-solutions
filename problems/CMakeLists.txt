@@ -1,0 +1,38 @@
+# Copyright 2020 Paul Robertson
+
+# A simple CMake file to collect the list of source files
+# in this directory (and subdirectories) and store them
+# in two variables, HEADER_FILES and SOURCE_FILES.
+# These variables can be accessed with the 
+# get_directory_property() command to enable the file lists
+# to be used by parent CMakeLists
+
+set(HEADER_FILES
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem1.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem2.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem3.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem4.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem5.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem6.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem7.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem8.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem9.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem10.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem11.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem12.h
+)
+
+set(SOURCE_FILES
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem1.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem2.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem3.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem4.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem5.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem6.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem7.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem8.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem9.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem10.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem11.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem12.cpp
+)
