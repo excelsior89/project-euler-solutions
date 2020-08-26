@@ -1,7 +1,7 @@
 # project-euler-solutions
 Solutions to a selection of the problems in [Project Euler](https://projecteuler.net/).
 
-The intention behind this repository is primarily to have a cloud backup of my personal solutions and to provide an easy way to share my solutions with other interested parties. Please bear in mind that you should refrain from browsing the solutions to any problems you wish to solve yourself (as mentioned on the Project Euler site).
+The intention behind this repository is primarily to have a cloud backup of my personal solutions and to provide an easy way to share my solutions with other interested parties. **Please bear in mind that you should refrain from browsing the solutions to any problems you wish to solve yourself** (as mentioned on the Project Euler site).
 
 ## Dependencies
 This project is developed in C++ using [Visual Studio 2017](https://visualstudio.microsoft.com/vs/older-downloads/). I've tried to avoid using any third party libraries so far, so the code should be able to build using any C++ compiler that supports C++14.
