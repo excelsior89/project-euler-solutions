@@ -332,7 +332,7 @@ ostream &PeProblem13::DisplaySolution(ostream &os)
 		"even if the remaining digits aren't." << endl << endl <<
 		"Method 1 solution: " << first_ten1 << endl << endl <<
 
-		formatting::MethodHeader(1) << endl << endl <<
+		formatting::MethodHeader(2) << endl << endl <<
 		"This method is similar to the first in that it relies on finite" << endl <<
 		"precision being \"good enough\" to get the leading 10 digits. This" << endl <<
 		"time, we convert the numbers to long integers (using the leading 16" << endl <<
