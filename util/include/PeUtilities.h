@@ -21,28 +21,7 @@ std::string ProfileHeader(int problem_number);
 std::string SolutionHeader(int solution_number);
 std::string MethodHeader(int method_number);
 
-
-// Manipulators for changing text colour
-namespace ansi {
-// Reset colour to default
-template <class CharT, class Traits>
-constexpr
-std::basic_ostream<CharT, Traits> &Reset(std::basic_ostream<CharT, Traits> &os)
-{
-	return os << "\033[0m";
-}
-
-// Make text red
-template <class CharT, class Traits>
-constexpr
-std::basic_ostream<CharT, Traits> &TextRed(std::basic_ostream<CharT, Traits> &os)
-{
-	return os << "\033[31m";
-}
-
-} // namespace ansi
-
-};
+}; // namespace formatting
 
 namespace math {
 const double kPhi = 1.6180339887499;

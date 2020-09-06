@@ -68,11 +68,10 @@ ostream &PeProblem1::DisplaySolution(ostream &os)
 
 		formatting::MethodHeader(2) << endl << endl <<
 		"A more elegant solution:" << endl <<
-		"The sum of integers from 1 to N is equal to (N^2 + N)/2. " << 
-		"The sum of multiples of of a number M from 1 to M*N is:" << endl <<
-		"M*(N^2 + N)/2" << endl <<
+		"The sum of integers from 1 to N is equal to (N^2 + N)/2. " << endl <<
+		"The sum of multiples of of a number M from 1 to M*N is M*(N^2 + N)/2." << endl <<
 		"The sum of multiples of of a number M from 1 to N is therefore:" << endl <<
-		"M*(P^2 + P)/2, where P = floor(N/M)" << endl << endl <<
+		"    M*(P^2 + P)/2, where P = floor(N/M)" << endl << endl <<
 		"If we're interested in multiples of more than one number, using the" << endl <<
 		"above formula cause overlap: numbers that are multiples of both the" << endl <<
 		"base numbers will be included twice. Fortunately, these numbers are" << endl <<

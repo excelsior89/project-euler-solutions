@@ -48,7 +48,7 @@ ostream &PeProblem6::DisplayProblem(ostream &os)
 		"The square of the sum of the first ten natural numbers is:" << endl <<
 		"(1+2+...+10)^2=55^2=3025" << endl <<
 		"Hence the difference between the sum of the squares of the" << endl <<
-		"first ten natural numbers and the square of the sum is 3025−385=2640." << endl <<
+		"first ten natural numbers and the square of the sum is 3025-385=2640." << endl <<
 		"Find the difference between the sum of the squares of the first " << endl <<
 		"one hundred natural numbers and the square of the sum." << endl << endl;
 
