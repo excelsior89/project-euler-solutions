@@ -44,13 +44,13 @@ get_directory_property(UTILITY_HEADER_FILES DIRECTORY util
                        DEFINITION HEADER_FILES)
 get_directory_property(UTILITY_SOURCE_FILES DIRECTORY util
                        DEFINITION SOURCE_FILES)
-					   
+				
 # Main
 get_directory_property(MAIN_HEADER_FILES DIRECTORY main
                        DEFINITION HEADER_FILES) # N.B. this is empty for now
 get_directory_property(MAIN_SOURCE_FILES DIRECTORY main
                        DEFINITION SOURCE_FILES)
-					   
+					
 # Include directories
 target_include_directories(${TARGET_NAME} PRIVATE
 	problems/include

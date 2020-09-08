@@ -171,7 +171,7 @@ bool PeBigInt::operator<=(const PeBigInt &rhs) const
 bool PeBigInt::operator>=(const PeBigInt &rhs) const
 {
 	return !(*this < rhs);
-} 
+}
 
 bool PeBigInt::operator==(const PeBigInt &rhs) const
 {
@@ -266,7 +266,7 @@ PeBigInt::operator long long int() const
 {
 	// Work out longest decimal size supported, subtracting one
 	// from the power of 2 since we only support the positive "half" of int range
-	size_t digitsize = 
+	size_t digitsize =
 		(size_t)floor((double)(8 * sizeof(long long int) - 1) * log10(2.0));
 
 	// Too large, return maximum possible value
@@ -281,7 +281,7 @@ PeBigInt::operator long long int() const
 		for (const auto &ai : digits_) {
 			sum += base_mul * (long long int)ai;
 
-			// This can overflow on the last loop but 
+			// This can overflow on the last loop but
 			// won't be used after that so don't worry
 			base_mul *= (long long int)kBase;
 		}
@@ -309,7 +309,7 @@ PeBigInt::operator long long int() const
 		for (const auto &ai : digits_) {
 			sum += base_mul * (long long int)ai;
 
-			// This can overflow on the last loop but 
+			// This can overflow on the last loop but
 			// won't be used after that so don't worry
 			base_mul *= (long long int)kBase;
 		}
@@ -331,7 +331,7 @@ PeBigInt::operator long long unsigned() const
 	}
 
 	// Work out longest decimal size supported
-	size_t digitsize = 
+	size_t digitsize =
 		(size_t)floor((double)(8 * sizeof(long long unsigned)) * log10(2.0));
 
 	// Too large, return maximum possible value
@@ -346,7 +346,7 @@ PeBigInt::operator long long unsigned() const
 		for (const auto &ai : digits_) {
 			sum += base_mul * (long long unsigned)ai;
 
-			// This can overflow on the last loop but 
+			// This can overflow on the last loop but
 			// won't be used after that so don't worry
 			base_mul *= (long long unsigned)kBase;
 		}
@@ -366,7 +366,7 @@ PeBigInt::operator long long unsigned() const
 		for (const auto &ai : digits_) {
 			sum += base_mul * (long long unsigned)ai;
 
-			// This can overflow on the last loop but 
+			// This can overflow on the last loop but
 			// won't be used after that so don't worry
 			base_mul *= (long long unsigned)kBase;
 		}
@@ -398,7 +398,7 @@ PeBigInt::operator long double() const
 	for (const auto &ai : digits_) {
 		sum += base_mul * (long double)ai;
 
-		// This can overflow on the last loop but 
+		// This can overflow on the last loop but
 		// won't be used after that so don't worry
 		base_mul *= (long double)kBase;
 	}
@@ -545,7 +545,7 @@ PeBigInt &PeBigInt::absMultEq(const PeBigInt &rhs)
 	for (size_t i = 0; i < digits_.size(); ++i) {
 		// Inner loop over rhs digits with extra pass if carry occurs
 		for (int j = 0, carry = 0; (j < (int)rhs.digits_.size()) || carry; ++j) {
-			long long int cur = res[i + j] + digits_[i] * 
+			long long int cur = res[i + j] + digits_[i] *
 				(j < (int)rhs.digits_.size() ? rhs.digits_[j] : 0) + carry;
 
 			res[i + j] = (int)(cur % kBase);

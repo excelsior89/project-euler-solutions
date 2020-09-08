@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
 		cout << "Pick a problem (1-700, enter 0 to exit): ";
 		cin >> problem_number;
-	
+
 		// Exit if we enter 0 as the problem number
 		if (problem_number == 0) {
 			return 0;
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 		} else {
 			cout << "Profiling will not be used." << endl;
 		}
-		
+
 		cout << endl;
 
 		// Display or profile as determined above

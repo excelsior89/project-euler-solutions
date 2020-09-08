@@ -35,7 +35,7 @@ const unsigned kSetSize = 4;
 // Brute force solution
 // Test all possible adjacent sets of digits vertically, horizontally and diagonally
 // and record the maximum
-static unsigned Method1(const unsigned number_grid[], const unsigned height, 
+static unsigned Method1(const unsigned number_grid[], const unsigned height,
 	const unsigned width, const unsigned set_size)
 {
 	unsigned max_product = 0, ibase = 0;
@@ -122,7 +122,7 @@ static unsigned Method1(const unsigned number_grid[], const unsigned height,
 // Still a rather brute force method, but just to be different, in this method
 // we search the row, column and diagonal spaces separately and attempt to skip
 // over any zeroes found
-static unsigned Method2(const unsigned number_grid[], const unsigned height, 
+static unsigned Method2(const unsigned number_grid[], const unsigned height,
 	const unsigned width, const unsigned set_size)
 {
 	unsigned max_product = 0, tmp_product1 = 1, tmp_product2 = 1;
@@ -308,10 +308,10 @@ ostream &PeProblem11::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_2_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl;
 
 	return os;

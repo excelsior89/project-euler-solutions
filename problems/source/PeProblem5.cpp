@@ -99,13 +99,11 @@ static int Method2(int n)
 	return lcm_product;
 }
 
-// Also using highest index prime factors, but instead
-// of factorising each number up to n, we can observe that
-// between 1 and n we will have an index of every prime up to n.
-// The index will be the highest power of each prime that is 
-// less than n.
-// E.g. for n = 10, we know we'll have primes {2,3,5,7}. The highest
-// index of each prime is:
+// Also using highest index prime factors, but instead of factorising each
+// number up to n, we can observe that between 1 and n we will have an index
+// of every prime up to n. The index will be the highest power of each prime
+// that is less than n. E.g. for n = 10, we know we'll have primes {2,3,5,7}.
+// The highest index of each prime is:
 //   2^3 = 8 (because 2^4 = 16 > 10)
 //   3^2 = 9 (3^3 = 27 > 10)
 //   5^1 = 5 (5^2 = 25 > 10)
@@ -208,13 +206,13 @@ ostream &PeProblem5::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_3_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_3_time / (long double)n_trials << endl << endl;
 
 	return os;

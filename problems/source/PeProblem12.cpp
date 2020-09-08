@@ -249,7 +249,7 @@ ostream &PeProblem12::ProfileSolutions(int n_trials, ostream &os)
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
 	// 2000 gives T_n near 2*10^9, so much higher will probably lead to overflow
-	const int kTargetDivisorCount = 300; 
+	const int kTargetDivisorCount = 300;
 	unsigned target_triangle_number1 = 0,
 		target_triangle_number2 = 0,
 		target_triangle_number3 = 0;
@@ -273,13 +273,13 @@ ostream &PeProblem12::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_3_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_3_time / (long double)n_trials << endl << endl;
 
 	return os;

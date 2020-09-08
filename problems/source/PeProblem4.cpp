@@ -81,7 +81,7 @@ static int Method2(unsigned digit_size)
 	// digit. These will have an odd number of digits and be of the form:
 	// 10^(n-1)*(ab...xyz) + (yx...ba) i.e. the last digit of the generating
 	// number is dropped.
-	// 
+	//
 	// Example:
 	// from 856 we generate:
 	// 100*856+58 = 85600+58 = 85658
@@ -156,7 +156,7 @@ static int Method3(unsigned digit_size)
 
 				// Does the n-digit factor have another n-digit number as
 				// its co-factor?
-				if ((palindrome_number / j < upper_ten_base) && 
+				if ((palindrome_number / j < upper_ten_base) &&
 					(palindrome_number >= lower_ten_base)) {
 					return palindrome_number;
 				}
@@ -248,13 +248,13 @@ ostream &PeProblem4::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_3_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_3_time / (long double)n_trials << endl << endl;
 
 	return os;

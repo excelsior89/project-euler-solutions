@@ -21,7 +21,7 @@ static long long int Method1(long long int trial_number)
 	}
 
 	long long int trial_sqrt = (long long int)ceil(sqrt((double)trial_number));
-	
+
 	for (long long int i = 3; ((i < trial_sqrt) && (i < trial_number)); i += 2) {
 		if ((trial_number % i) == 0) {
 			factor = i;
@@ -116,7 +116,7 @@ static long long int Method2(long long int trial_number)
 	//... then removing the primes already in the basis
 	increments.erase(increments.begin(), increments.begin() + basis.size());
 
-	// ...then completing the "wheel" by appending the value of 
+	// ...then completing the "wheel" by appending the value of
 	// the first coprime + the product of the basis
 	increments.push_back(increments.front() + basis_mod);
 
@@ -222,10 +222,10 @@ ostream &PeProblem3::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_2_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl;
 
 	return os;

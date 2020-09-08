@@ -35,6 +35,96 @@ string MethodHeader(int method_number)
 };
 
 namespace math {
+// Helper recursion function for CollatzGraphIterations().
+// This function adds <value>'s current <depth> to the map <iteration_counts>,
+// then calls itself for 2*<value> and, if mod(value,6)=4, also for
+// (<value>-1)/3.
+void CollatzRecursion(const unsigned depth_limit, const unsigned value,
+	const unsigned depth, unordered_map<unsigned, unsigned> &iteration_counts)
+{
+	// Update the map
+	iteration_counts[value] = depth;
+
+	// Check for recursion depth limit
+	if (depth < depth_limit) {
+		// Every value follows the "2n" path
+		CollatzRecursion(depth_limit, 2 * value, depth + 1, iteration_counts);
+
+		// Some values also follow an additional path for odd parity
+		// determined by mod(value,6)=4. However, 4 itself is a special
+		// case and will loop (4->2->1->4->2->1) indefinitely, so we need
+		// to check for the value 4 itself
+		if ((value != 4) && (value % 6 == 4)) {
+			CollatzRecursion(depth_limit, (value - 1) / 3, depth + 1, iteration_counts);
+		}
+	}
+}
+
+// Generate a map of numbers to Collatz iterations for each number to reach 1.
+// Collatz iterations refers to the sequence defined in the Collatz Conjecture
+// (wiki link: https://en.wikipedia.org/wiki/Collatz_conjecture):
+//    n -> n/2 (n is even)
+//    n -> 3n + 1 (n is odd)
+// The generation of this map is limited by the depth (maximum number of
+// iterations) to search for. It essentially operates "in reverse" to the above
+// mapping by starting at 1 and mapping to 2n, and (n-1)/3 if mod(n,6) is 4.
+// This search operates recursively up to the specified depth limit.
+unordered_map<unsigned, unsigned> CollatzGraphIterations(const unsigned depth_limit)
+{
+	// Map to store iteration counts, initialised with the base case of
+	// 1 needing 0 iterations.
+	unordered_map<unsigned, unsigned> iteration_count({{1, 0}});
+
+	// Recursion to find iteration counts up to limit using helper function
+	CollatzRecursion(depth_limit, 2, 1, iteration_count);
+
+	return iteration_count;
+}
+
+// Construct the sequence formed by performing the iterative mapping defined in
+// the Collatz Conjecture (https://en.wikipedia.org/wiki/Collatz_conjecture):
+//    n -> n/2 (n is even)
+//    n -> 3n + 1 (n is odd)
+// This values in the sequence can greatly exceed the starting value.
+// For this reason, the returned sequence uses long long (64 bit) integers,
+// even though the starting value is limited to only regular (32 bit) integers.
+vector<long long unsigned> CollatzSequence(const unsigned starting_value)
+{
+	// Record the maximum length sequence.
+	// Doing this separately once the maximum length starting number
+	// has already been found, otherwise we'd be resizing and writing
+	// a lot to the sequence vector.
+	vector<long long unsigned> sequence;
+
+	// Simple "blind" guess of memory needs
+	unsigned reserved_length = 100;
+	sequence.reserve(reserved_length);
+
+	long long unsigned tmp_number =
+		static_cast<long long unsigned>(starting_value);
+	size_t i = 0;
+
+	// The iteration itself
+	while (tmp_number != 1) {
+		if (math::IsEven(tmp_number)) {
+			tmp_number /= 2;
+		} else {
+			tmp_number = 3 * tmp_number + 1;
+		}
+
+		// Trying to be a bit smarter about memory allocation
+		if (i > sequence.size()) {
+			reserved_length *= 2;
+			sequence.reserve(reserved_length);
+		}
+
+		sequence.push_back(tmp_number);
+		++i;
+	}
+
+	return sequence;
+}
+
 // Return a vector containing all factors of <trial_number>,
 // from 1...trial_number.
 // This is done by simply trialing each integer from 1...sqrt(trial_number)
@@ -88,36 +178,36 @@ int FibonacciDirect(int n)
 // Works with integers so should be exact
 // Note that N > 46 will overflow standard 32 bit int,
 // so this function will return -1 in these cases.
-#define FIB_MAX 64 
+#define FIB_MAX 64
 static int ff[64] = {0}; // Overflow past max just in case
-int FibonacciExact(int n) 
+int FibonacciExact(int n)
 {
 	// Sanity check
 	if (n > 46)
 		return -1;
 
     // Base cases
-    if (n == 0) 
-        return 0; 
-    if (n == 1 || n == 2) 
+    if (n == 0)
+        return 0;
+    if (n == 1 || n == 2)
         return (ff[n] = 1);
-  
+
     // If Nth Fibonacci number is already computed
     if (ff[n])
         return ff[n];
-  
-    int k = (n & 1) ? (n + 1) / 2 : n / 2; 
-  
-    // Applying above formula [Note value n&1 is 1 
+
+    int k = (n & 1) ? (n + 1) / 2 : n / 2;
+
+    // Applying above formula [Note value n&1 is 1
     // if n is odd, else 0.
 
 	int fk = FibonacciExact(k);
 	int fkm1 = FibonacciExact(k - 1);
     ff[n] = (n & 1) ?
 		(fk * fk + fkm1 * fkm1) :
-           (2 * fkm1 + fk) * fk; 
-  
-    return ff[n]; 
+           (2 * fkm1 + fk) * fk;
+
+    return ff[n];
 }
 #undef FIB_MAX
 
@@ -166,9 +256,9 @@ vector<unsigned> GeneratePrimesEratosthenes(unsigned limit)
 		// a reasonable upper bound.
 		// The following estimate comes from:
 		//   Rosser, J. Barkley; Schoenfeld, Lowell (1962).
-		//   "Approximate formulas for some functions of prime numbers". 
+		//   "Approximate formulas for some functions of prime numbers".
 		//   Illinois J. Math. 6: 64–94. doi:10.1215/ijm/1255631807
-		unsigned num_primes = 
+		unsigned num_primes =
 			(unsigned)(1.25506 * ((double)limit / log((double)limit)));
 
 		// Set up the primes array
@@ -243,9 +333,9 @@ vector<unsigned> GeneratePrimesSundaram(unsigned limit)
 		// a reasonable upper bound.
 		// The following estimate comes from:
 		//   Rosser, J. Barkley; Schoenfeld, Lowell (1962).
-		//   "Approximate formulas for some functions of prime numbers". 
+		//   "Approximate formulas for some functions of prime numbers".
 		//   Illinois J. Math. 6: 64–94. doi:10.1215/ijm/1255631807
-		unsigned num_primes = 
+		unsigned num_primes =
 			(unsigned)(1.25506 * ((double)limit / log((double)limit)));
 
 		// Set up the primes array
@@ -384,11 +474,9 @@ vector<unsigned> PrimeFactors(unsigned trial_number)
 		return factors;
 	}
 
-
 	// Now we test k until k^2 exceeds the trial numbers
 	// We increment k using the increment steps in the increments array
 	// which is more efficient than simply checking every integer
-	
 
 	while (k * k <= trial_number) {
 		if (trial_number % k == 0) {
@@ -418,12 +506,12 @@ vector<unsigned> PrimeFactors(unsigned trial_number)
 // Reverse an integers digits, useful for testing palindromes
 int ReverseDigits(int num)
 {
-    int rev_num = 0; 
-    while (num > 0) { 
-        rev_num = 10 * rev_num + num % 10; 
+    int rev_num = 0;
+    while (num > 0) {
+        rev_num = 10 * rev_num + num % 10;
         num /= 10; // Integer division
-    } 
-    return rev_num; 
+    }
+    return rev_num;
 }
 
 // The nth pyramid number, the sum of integers from 1 to n

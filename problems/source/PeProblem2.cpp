@@ -13,7 +13,7 @@ static int Method1(int limit)
 	int t0 = 0, t1 = 1; // Base case terms
 
 	int tn = 1;
-	
+
 	// Continue until limit reached
 	while (tn <= limit) {
 		// Add term if even
@@ -24,7 +24,7 @@ static int Method1(int limit)
 		t0 = t1;
 		t1 = tn;
 	}
-	
+
 	return cumulative_sum;
 }
 
@@ -36,7 +36,7 @@ static int Method2(int limit)
 	int t0 = 0, t1 = 2; // Base case terms
 
 	int tn = 2;
-	
+
 	// Continue until limit reached
 	while (tn <= limit) {
 		// Every term is even so no need to check
@@ -46,7 +46,7 @@ static int Method2(int limit)
 		t0 = t1;
 		t1 = tn;
 	}
-	
+
 	return cumulative_sum;
 }
 
@@ -159,13 +159,13 @@ ostream &PeProblem2::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_3_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_3_time / (long double)n_trials << endl << endl;
 
 	return os;

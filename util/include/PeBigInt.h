@@ -77,25 +77,25 @@ public:
 
 	// Friends defined inside class body are inline and are hidden from non-ADL lookup
 	// Passing lhs by value helps optimise chains like a+b+c
-	friend PeBigInt operator+(PeBigInt lhs, const PeBigInt& rhs) 
+	friend PeBigInt operator+(PeBigInt lhs, const PeBigInt& rhs)
 	{
 		lhs += rhs; // Reuse compound assignment
 		return lhs; // Return the result by value (uses move constructor)
 	}
 
-	friend PeBigInt operator-(PeBigInt lhs, const PeBigInt& rhs) 
+	friend PeBigInt operator-(PeBigInt lhs, const PeBigInt& rhs)
 	{
 		lhs -= rhs;
 		return lhs;
 	}
 
-	friend PeBigInt operator*(PeBigInt lhs, const PeBigInt& rhs) 
+	friend PeBigInt operator*(PeBigInt lhs, const PeBigInt& rhs)
 	{
 		lhs *= rhs;
 		return lhs;
 	}
 
-	friend PeBigInt operator/(PeBigInt lhs, const PeBigInt& rhs) 
+	friend PeBigInt operator/(PeBigInt lhs, const PeBigInt& rhs)
 	{
 		lhs /= rhs;
 		return lhs;
@@ -152,7 +152,7 @@ private:
 	PeBigInt &absDivEq(const PeBigInt &rhs);
 
 	// Divide by a denominator less than kBase.
-	// Note that denominator is not checked against kBase; 
+	// Note that denominator is not checked against kBase;
 	// dividing by a denominator greater than kBase is undefined.
 	PeBigInt &absShortDivEq(int denominator);
 

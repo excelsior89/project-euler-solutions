@@ -41,7 +41,7 @@ static unsigned Method1(unsigned triple_sum, tuple<unsigned, unsigned, unsigned>
 // Better searching bounds than Method 1
 static unsigned Method2(unsigned triple_sum, tuple<unsigned, unsigned, unsigned> &triple)
 {
-	// The lowest Pythagorean triple sum is 12, so 
+	// The lowest Pythagorean triple sum is 12, so
 	// we can quickly exit for a sum less than 12
 	if (triple_sum < 12) {
 		return 0;
@@ -81,15 +81,15 @@ static unsigned Method2(unsigned triple_sum, tuple<unsigned, unsigned, unsigned>
 	// loop but this would probably be as expensive as simply checking
 	// the sum.
 
-	for (unsigned k = 1; 
+	for (unsigned k = 1;
 		k < (unsigned)ceil((float)triple_sum / 12.0f); ++k) {
 		// Divisibility check
 		if (triple_sum % (2 * k) != 0) {
 			continue;
 		}
-		for (unsigned n = 1; 
+		for (unsigned n = 1;
 			n < (unsigned)ceil((float)(triple_sum - 8) / 4.0f); ++n) {
-			for (unsigned m = n + 1; 
+			for (unsigned m = n + 1;
 				m < (unsigned)ceil(0.5f + sqrtf(0.25f + (float)(triple_sum) / 2.0f)); ++m) {
 				// Check the sum
 				if ((2 * k * (m * m + m * n)) == triple_sum) {
@@ -144,18 +144,18 @@ ostream &PeProblem9::DisplaySolution(ostream &os)
 	prod2 = Method2(kTargetSum, triple2);
 
 	os << formatting::SolutionHeader(kProblemNumber) << endl << endl <<
-		"Answer: " << "Product: " << prod1 << " (" << 
-			get<0>(triple1) << ", " << 
-			get<1>(triple1) << ", " << 
+		"Answer: " << "Product: " << prod1 << " (" <<
+			get<0>(triple1) << ", " <<
+			get<1>(triple1) << ", " <<
 			get<2>(triple1) << ")" << endl << endl <<
 
 		formatting::MethodHeader(1) << endl << endl <<
 		"This uses Euclid's method to generate Pythagorean triples until a" << endl <<
 		"valid one is found. This doesn't account for the possibility of" << endl <<
 		"multiple solutions." << endl << endl <<
-		"Method 1 solution: " << "Product: " << prod1 << " (" << 
-			get<0>(triple1) << ", " << 
-			get<1>(triple1) << ", " << 
+		"Method 1 solution: " << "Product: " << prod1 << " (" <<
+			get<0>(triple1) << ", " <<
+			get<1>(triple1) << ", " <<
 			get<2>(triple1) << ")" << endl << endl <<
 
 		formatting::MethodHeader(2) << endl << endl <<
@@ -181,9 +181,9 @@ ostream &PeProblem9::DisplaySolution(ostream &os)
 		"We also can apply a divisibility check since we're only looking at" << endl <<
 		"integer solutions. From the sum 2*k*m*(m+n), we know that a valid sum" << endl <<
 		"must be divisible be 2, k, m and (m+n)." << endl << endl <<
-		"Method 2 solution: " << "Product: " << prod2 << " (" << 
-			get<0>(triple2) << ", " << 
-			get<1>(triple2) << ", " << 
+		"Method 2 solution: " << "Product: " << prod2 << " (" <<
+			get<0>(triple2) << ", " <<
+			get<1>(triple2) << ", " <<
 			get<2>(triple2) << ")" << endl << endl;
 
 	return os;
@@ -210,10 +210,10 @@ ostream &PeProblem9::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_2_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl;
 
 	return os;

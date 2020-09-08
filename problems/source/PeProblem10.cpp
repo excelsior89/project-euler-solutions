@@ -4,11 +4,9 @@ using namespace std;
 
 namespace pe {
 
-
-// Use the Sieve of Eratosthenes to generate primes until the summation 
-// limit is met.
-// We're using 64 bit integers since the problem statement could start pushing
-// us towards quite large values...
+// Use the Sieve of Eratosthenes to generate primes until the summation limit
+// is met. We're using 64 bit integers since the problem statement could start
+// pushing us towards quite large values.
 static uint64_t Method1(uint64_t limit)
 {
 	uint64_t sum = 0;
@@ -127,10 +125,10 @@ ostream &PeProblem10::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_2_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl;
 
 	return os;

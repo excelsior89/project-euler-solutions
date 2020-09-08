@@ -30,6 +30,26 @@ const double kHalfPi = 1.5707963267949;
 const double kPi = 3.14159265358979;
 const double kTwoPi = 6.28318530717959;
 
+// Generate a map of numbers to Collatz iterations for each number to reach 1.
+// Collatz iterations refers to the sequence defined in the Collatz Conjecture
+// (wiki link: https://en.wikipedia.org/wiki/Collatz_conjecture):
+//    n -> n/2 (n is even)
+//    n -> 3n + 1 (n is odd)
+// The generation of this map is limited by the depth (maximum number of
+// iterations) to search for. It essentially operates "in reverse" to the above
+// mapping by starting at 1 and mapping to 2n, and (n-1)/3 if mod(n,6) is 4.
+// This search operates recursively up to the specified depth limit.
+std::unordered_map<unsigned, unsigned> CollatzGraphIterations(const unsigned depth_limit);
+
+// Construct the sequence formed by performing the iterative mapping defined in
+// the Collatz Conjecture (https://en.wikipedia.org/wiki/Collatz_conjecture):
+//    n -> n/2 (n is even)
+//    n -> 3n + 1 (n is odd)
+// This values in the sequence can greatly exceed the starting value.
+// For this reason, the returned sequence uses long long (64 bit) integers,
+// even though the starting value is limited to only regular (32 bit) integers.
+std::vector<long long unsigned> CollatzSequence(const unsigned starting_value);
+
 // Return a vector containing all factors of <trial_number>,
 // from 1...trial_number. O(sqrt(n)).
 std::vector<unsigned> Factors(unsigned trial_number);
@@ -61,6 +81,17 @@ std::tuple<unsigned, unsigned, unsigned> GeneratePythagoreanEuclidTriple(
 
 // Greatest common divisor
 int Gcd(int a, int b);
+
+
+// Parity checks
+inline bool IsEven(int n) {
+	return !(n & 1);
+}
+
+inline bool IsOdd(int n) {
+	return (n & 1);
+}
+
 
 // Test if three integers (a,b,c) are a Pythagorean triple
 bool IsPythagoreanTriple(unsigned a, unsigned b, unsigned c);

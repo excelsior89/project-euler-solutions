@@ -102,7 +102,7 @@ PeProblem7::PeProblem7()
 ostream &PeProblem7::DisplayProblem(ostream &os)
 {
 	os << formatting::ProblemHeader(kProblemNumber) << endl << endl <<
-		"By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we" << endl << 
+		"By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we" << endl <<
 		"can see that the 6th prime is 13. What is the 10001st prime number?" << endl << endl;
 	return os;
 }
@@ -157,10 +157,10 @@ ostream &PeProblem7::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_2_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl;
 
 	return os;

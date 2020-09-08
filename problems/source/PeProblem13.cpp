@@ -115,7 +115,7 @@ const array<string, MNUMBERS> kLargeNumbers {
 // get a bit silly...
 // Asking for more than ~14 digits will start to break things down
 // in methods 1 and 2 as they rely on finite precision arithmetic
-const int kNDigits = 10; 
+const int kNDigits = 10;
 
 // A "hopeful" approach: convert each number to a double and sum them.
 // The accuracy of a double precision floating point numbers is roughly
@@ -409,13 +409,13 @@ ostream &PeProblem13::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_3_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_3_time / (long double)n_trials << endl << endl;
 
 	return os;

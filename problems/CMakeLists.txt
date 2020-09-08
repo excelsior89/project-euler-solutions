@@ -21,6 +21,7 @@ set(HEADER_FILES
 	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem11.h
 	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem12.h
 	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem13.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem14.h
 )
 
 set(SOURCE_FILES
@@ -37,4 +38,5 @@ set(SOURCE_FILES
 	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem11.cpp
 	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem12.cpp
 	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem13.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem14.cpp
 )

@@ -137,14 +137,14 @@ static uint64_t Method3(const vector<uint64_t> &digit_sequence, size_t window_si
 
 				// Window checking between the current zero
 				// and the previous zero.
-				for (size_t start_ind = previous_zero_index + 1, 
+				for (size_t start_ind = previous_zero_index + 1,
 					end_ind = previous_zero_index + window_size;
 					end_ind < i; ++start_ind, ++end_ind) {
 
 					// Product of the window
 					// Product of window - remember to accumulate to end_ind + 1
 					// (to include end_ind itself)
-					uint64_t digit_product = accumulate(digit_sequence.begin() + start_ind, 
+					uint64_t digit_product = accumulate(digit_sequence.begin() + start_ind,
 						digit_sequence.begin() + end_ind + 1, (uint64_t)1, multiplies<uint64_t>());
 
 					// Keep the product if it's the largest so far
@@ -331,13 +331,13 @@ ostream &PeProblem8::ProfileSolutions(int n_trials, ostream &os)
 	clock_t method_3_time = clock() - start_time;
 
 	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_1_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_2_time / (long double)n_trials << endl << endl <<
 		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " << 
+		"Time average over " << n_trials << " trials: " <<
 		(long double)method_3_time / (long double)n_trials << endl << endl;
 
 	return os;

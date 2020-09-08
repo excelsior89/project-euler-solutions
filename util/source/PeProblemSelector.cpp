@@ -13,6 +13,7 @@
 #include "PeProblem11.h"
 #include "PeProblem12.h"
 #include "PeProblem13.h"
+#include "PeProblem14.h"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ PeProblemSelector::PeProblemSelector()
 	problems_.push_back(make_unique<PeProblem11>());
 	problems_.push_back(make_unique<PeProblem12>());
 	problems_.push_back(make_unique<PeProblem13>());
+	problems_.push_back(make_unique<PeProblem14>());
 }
 
 
