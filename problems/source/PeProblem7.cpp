@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem7.cpp
+//
+// "10001st prime"
+
 #include "PeProblem7.h"
 
 using namespace std;
@@ -91,11 +97,6 @@ static int Method2(int n)
 		auto primes = math::GeneratePrimesSundaram(limit);
 		return primes[n - 1];
 	}
-}
-
-
-PeProblem7::PeProblem7()
-{
 }
 
 

@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem9.cpp
+//
+// "Special Pythagorean triplet"
+
 #include "PeProblem9.h"
 
 using namespace std;
@@ -8,7 +14,7 @@ namespace pe {
 // Simple search
 // Return product abc if a triple (a,b,c) that makes the sum is found, otherwise return 0.
 // Store the triple, if found, in <triple>.
-static unsigned Method1(unsigned triple_sum, tuple<unsigned, unsigned, unsigned> &triple)
+static PeUint Method1(PeUint triple_sum, tuple<PeUint, PeUint, PeUint> &triple)
 {
 	// Based on Euclid's formula, the sum a + b + c
 	// is equivalent to 2 * k * m * m + 2 * k * m * n.
@@ -19,9 +25,9 @@ static unsigned Method1(unsigned triple_sum, tuple<unsigned, unsigned, unsigned>
 	// k < triple_sum since, m < triple_sum, n < triple_sum
 
 	// We get a glorious O(n^3) loop here
-	for (unsigned k = 1; k < triple_sum; ++k) {
-		for (unsigned n = 1; n < triple_sum; ++n) {
-			for (unsigned m = n + 1; m < triple_sum; ++m) {
+	for (PeUint k = 1; k < triple_sum; ++k) {
+		for (PeUint n = 1; n < triple_sum; ++n) {
+			for (PeUint m = n + 1; m < triple_sum; ++m) {
 				// Check the sum
 				if ((2 * k * m * m + 2 * k * m * n) == triple_sum) {
 					// Set the triple
@@ -39,7 +45,7 @@ static unsigned Method1(unsigned triple_sum, tuple<unsigned, unsigned, unsigned>
 }
 
 // Better searching bounds than Method 1
-static unsigned Method2(unsigned triple_sum, tuple<unsigned, unsigned, unsigned> &triple)
+static PeUint Method2(PeUint triple_sum, tuple<PeUint, PeUint, PeUint> &triple)
 {
 	// The lowest Pythagorean triple sum is 12, so
 	// we can quickly exit for a sum less than 12
@@ -81,16 +87,17 @@ static unsigned Method2(unsigned triple_sum, tuple<unsigned, unsigned, unsigned>
 	// loop but this would probably be as expensive as simply checking
 	// the sum.
 
-	for (unsigned k = 1;
-		k < (unsigned)ceil((float)triple_sum / 12.0f); ++k) {
+	for (PeUint k = 1;
+		k < static_cast<PeUint>(ceil(float(triple_sum) / 12.0f)); ++k) {
 		// Divisibility check
 		if (triple_sum % (2 * k) != 0) {
 			continue;
 		}
-		for (unsigned n = 1;
-			n < (unsigned)ceil((float)(triple_sum - 8) / 4.0f); ++n) {
-			for (unsigned m = n + 1;
-				m < (unsigned)ceil(0.5f + sqrtf(0.25f + (float)(triple_sum) / 2.0f)); ++m) {
+		for (PeUint n = 1;
+			n < static_cast<PeUint>(ceil(float(triple_sum - 8) / 4.0f)); ++n) {
+			for (PeUint m = n + 1;
+				m < static_cast<PeUint>(ceil(0.5f + 
+					sqrtf(0.25f + float(triple_sum) / 2.0f))); ++m) {
 				// Check the sum
 				if ((2 * k * (m * m + m * n)) == triple_sum) {
 					// Set the triple
@@ -117,11 +124,6 @@ static unsigned Method2(unsigned triple_sum, tuple<unsigned, unsigned, unsigned>
 }
 
 
-PeProblem9::PeProblem9()
-{
-}
-
-
 ostream &PeProblem9::DisplayProblem(ostream &os)
 {
 	os << formatting::ProblemHeader(kProblemNumber) << endl << endl <<
@@ -136,9 +138,9 @@ ostream &PeProblem9::DisplayProblem(ostream &os)
 
 ostream &PeProblem9::DisplaySolution(ostream &os)
 {
-	const unsigned kTargetSum = 1000;
-	tuple<unsigned, unsigned, unsigned> triple1(0,0,0), triple2(0,0,0);
-	unsigned prod1 = 0, prod2 = 0;
+	const PeUint kTargetSum = 1000;
+	tuple<PeUint, PeUint, PeUint> triple1(0,0,0), triple2(0,0,0);
+	PeUint prod1 = 0, prod2 = 0;
 
 	prod1 = Method1(kTargetSum, triple1);
 	prod2 = Method2(kTargetSum, triple2);
@@ -193,9 +195,9 @@ ostream &PeProblem9::ProfileSolutions(int n_trials, ostream &os)
 {
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const unsigned kTargetSum = 1000;
-	tuple<unsigned, unsigned, unsigned> triple1(0,0,0), triple2(0,0,0);
-	unsigned prod1 = 0, prod2 = 0;
+	const PeUint kTargetSum = 1000;
+	tuple<PeUint, PeUint, PeUint> triple1(0,0,0), triple2(0,0,0);
+	PeUint prod1 = 0, prod2 = 0;
 
 	clock_t start_time(clock());
 	for (int i = 0; i < n_trials; ++i) {

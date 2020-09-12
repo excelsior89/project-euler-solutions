@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem13.cpp
+//
+// "Large sum"
+
 #include "PeProblem13.h"
 
 using namespace std;
@@ -115,7 +121,7 @@ const array<string, MNUMBERS> kLargeNumbers {
 // get a bit silly...
 // Asking for more than ~14 digits will start to break things down
 // in methods 1 and 2 as they rely on finite precision arithmetic
-const int kNDigits = 10;
+const PeUint kNDigits = 10;
 
 // A "hopeful" approach: convert each number to a double and sum them.
 // The accuracy of a double precision floating point numbers is roughly
@@ -123,7 +129,7 @@ const int kNDigits = 10;
 // enough even though the calculated sum might differ from the true sum.
 // Perhaps unsurprisingly, this method is the fastest method as it uses the
 // most "built in" arithmetic.
-static unsigned long long Method1(const array<string, MNUMBERS> &number_array)
+static PeUint Method1(const array<string, MNUMBERS> &number_array)
 {
 	// Collect the sum of the numbers as doubles
 	double sum = 0.0;
@@ -138,7 +144,7 @@ static unsigned long long Method1(const array<string, MNUMBERS> &number_array)
 
 	// Round the sum and cast as an integer value
 	// Using long long (64 bit) precision should let us support up to 19 digits
-	unsigned long long first_n_digits = static_cast<unsigned long long>(round(sum));
+	PeUint first_n_digits = static_cast<PeUint>(round(sum));
 
 	return first_n_digits;
 }
@@ -150,13 +156,13 @@ static unsigned long long Method1(const array<string, MNUMBERS> &number_array)
 // The method is the second fastest since it involves a bit more string
 // manipulation to read in the digits compared to method 1, but is still using
 // built in arithmetic to do its calculations
-static unsigned long long Method2(const array<string, MNUMBERS> &number_array)
+static PeUint Method2(const array<string, MNUMBERS> &number_array)
 {
 	// Collect the sum of the numbers as long long (64 bit) unsigned
-	long long unsigned sum = 0;
+	PeUint sum = 0;
 
 	// Careful not to make this too large for the integer data type
-	const int kSummationDigits = 16;
+	const PeUint kSummationDigits = 16;
 	for (const auto &i: number_array) {
 		// Take leading digits of string to convert to integer
 		sum += stoull(i.substr(0, kSummationDigits));
@@ -164,7 +170,7 @@ static unsigned long long Method2(const array<string, MNUMBERS> &number_array)
 
 	// Get the leading N digits
 	double sum_exp10 = floor(log10(sum)) - static_cast<double>(kNDigits - 1);
-	sum /= static_cast<unsigned long long>(pow(10.0, sum_exp10)); // Integer division
+	sum /= static_cast<PeUint>(pow(10.0, sum_exp10)); // Integer division
 	
 	// Sum is already a long long so return it directly
 	return sum;
@@ -180,7 +186,7 @@ static unsigned long long Method2(const array<string, MNUMBERS> &number_array)
 // higher level than conventional computer arithmetic, and using generally
 // naive algorithms to do so. It is, however, the only method that will return
 // the correct result, no matter how long the numbers get.
-static unsigned long long Method3(const array<string, MNUMBERS> &number_array)
+static PeUint Method3(const array<string, MNUMBERS> &number_array)
 {
 	// Collect the sum of the numbers as PeBigInts
 	PeBigInt sum(0);
@@ -194,11 +200,6 @@ static unsigned long long Method3(const array<string, MNUMBERS> &number_array)
 
 	// Take the first 10 digits and return as a regular unsigned integer
 	return stoull(cStr.substr(0, kNDigits));
-}
-
-
-PeProblem13::PeProblem13()
-{
 }
 
 
@@ -386,7 +387,7 @@ ostream &PeProblem13::ProfileSolutions(int n_trials, ostream &os)
 {
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	unsigned first_ten1 = 0,
+	PeUint first_ten1 = 0,
 		first_ten2 = 0,
 		first_ten3 = 0;
 

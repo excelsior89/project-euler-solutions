@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem6.cpp
+//
+// "Sum square difference"
+
 #include "PeProblem6.h"
 
 using namespace std;
@@ -32,11 +38,6 @@ static int Method2(int n)
 {
 	// Horner form of the above polynomial
 	return n * (-2 + n * (-3 + n * (2 + 3 * n))) / 12;
-}
-
-
-PeProblem6::PeProblem6()
-{
 }
 
 

@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeUtilities.cpp
+//
+// Print formatting, math and other utility functions
+
 #include "PeUtilities.h"
 
 using namespace std;
@@ -39,8 +45,8 @@ namespace math {
 // This function adds <value>'s current <depth> to the map <iteration_counts>,
 // then calls itself for 2*<value> and, if mod(value,6)=4, also for
 // (<value>-1)/3.
-void CollatzRecursion(const unsigned depth_limit, const unsigned value,
-	const unsigned depth, unordered_map<unsigned, unsigned> &iteration_counts)
+void CollatzRecursion(const PeUint depth_limit, const PeUint value,
+	const PeUint depth, unordered_map<PeUint, PeUint> &iteration_counts)
 {
 	// Update the map
 	iteration_counts[value] = depth;
@@ -69,11 +75,11 @@ void CollatzRecursion(const unsigned depth_limit, const unsigned value,
 // iterations) to search for. It essentially operates "in reverse" to the above
 // mapping by starting at 1 and mapping to 2n, and (n-1)/3 if mod(n,6) is 4.
 // This search operates recursively up to the specified depth limit.
-unordered_map<unsigned, unsigned> CollatzGraphIterations(const unsigned depth_limit)
+unordered_map<PeUint, PeUint> CollatzGraphIterations(const PeUint depth_limit)
 {
 	// Map to store iteration counts, initialised with the base case of
 	// 1 needing 0 iterations.
-	unordered_map<unsigned, unsigned> iteration_count({{1, 0}});
+	unordered_map<PeUint, PeUint> iteration_count({{1, 0}});
 
 	// Recursion to find iteration counts up to limit using helper function
 	CollatzRecursion(depth_limit, 2, 1, iteration_count);
@@ -88,20 +94,20 @@ unordered_map<unsigned, unsigned> CollatzGraphIterations(const unsigned depth_li
 // This values in the sequence can greatly exceed the starting value.
 // For this reason, the returned sequence uses long long (64 bit) integers,
 // even though the starting value is limited to only regular (32 bit) integers.
-vector<long long unsigned> CollatzSequence(const unsigned starting_value)
+vector<PeUint> CollatzSequence(const PeUint starting_value)
 {
 	// Record the maximum length sequence.
 	// Doing this separately once the maximum length starting number
 	// has already been found, otherwise we'd be resizing and writing
 	// a lot to the sequence vector.
-	vector<long long unsigned> sequence;
+	vector<PeUint> sequence;
 
 	// Simple "blind" guess of memory needs
-	unsigned reserved_length = 100;
+	PeUint reserved_length = 100;
 	sequence.reserve(reserved_length);
 
-	long long unsigned tmp_number =
-		static_cast<long long unsigned>(starting_value);
+	PeUint tmp_number =
+		static_cast<PeUint>(starting_value);
 	size_t i = 0;
 
 	// The iteration itself
@@ -132,20 +138,20 @@ vector<long long unsigned> CollatzSequence(const unsigned starting_value)
 // n = a * b
 // if a <= sqrt(n) then b >= sqrt(n)
 // b = n / a
-vector<unsigned> Factors(unsigned trial_number)
+vector<PeUint> Factors(PeUint trial_number)
 {
 	// Collect the factors in two arrays, since there's always
 	// pairs of factors (except for squares). The trivial factors
 	// of 1 and trial_number are inserted straight away.
-	vector<unsigned> lower_factors({1});
-	vector<unsigned> upper_factors({trial_number});
+	vector<PeUint> lower_factors({1});
+	vector<PeUint> upper_factors({trial_number});
 
 	// Test integers from 2...sqrt(trial_number) to find lower factors
 	// For any lower factor, the upper factor is trial_number / lower_factor
 	// Store each new factor at the end of its respective array.
 	// This stores the lower factors is ascending order, while the
 	// upper factors will be stored in descending order
-	for (unsigned i = 2; i <= (unsigned)(sqrt((double)trial_number)); ++i) {
+	for (PeUint i = 2; i <= (PeUint)(sqrt((double)trial_number)); ++i) {
 		if (trial_number % i == 0) {
 			lower_factors.push_back(i);
 			upper_factors.push_back(trial_number / i);
@@ -169,18 +175,17 @@ vector<unsigned> Factors(unsigned trial_number)
 // O(1) calculation of the Nth Fibonacci number
 // Inaccurate for large N as it uses floating point arithmetic
 // Note that N > 46 will overflow standard 32 bit int
-int FibonacciDirect(int n)
+PeUint FibonacciDirect(PeUint n)
 {
-	return (int)round(pow(kPhi, n) / sqrt(5.0));
+	return static_cast<PeUint>(round(pow(kPhi, n) / sqrt(5.0)));
 }
 
 // O(log N) calculation of the Nth Fibonacci number
 // Works with integers so should be exact
 // Note that N > 46 will overflow standard 32 bit int,
 // so this function will return -1 in these cases.
-#define FIB_MAX 64
-static int ff[64] = {0}; // Overflow past max just in case
-int FibonacciExact(int n)
+static PeUint ff[64] = {0}; // Overflow past max just in case
+PeUint FibonacciExact(PeUint n)
 {
 	// Sanity check
 	if (n > 46)
@@ -196,59 +201,90 @@ int FibonacciExact(int n)
     if (ff[n])
         return ff[n];
 
-    int k = (n & 1) ? (n + 1) / 2 : n / 2;
+    PeUint k = (n & 1) ? (n + 1) / 2 : n / 2;
 
     // Applying above formula [Note value n&1 is 1
     // if n is odd, else 0.
 
-	int fk = FibonacciExact(k);
-	int fkm1 = FibonacciExact(k - 1);
+	PeUint fk = FibonacciExact(k);
+	PeUint fkm1 = FibonacciExact(k - 1);
     ff[n] = (n & 1) ?
 		(fk * fk + fkm1 * fkm1) :
            (2 * fkm1 + fk) * fk;
 
     return ff[n];
 }
-#undef FIB_MAX
 
 
-// Greatest common divisor using Euler's algorithm
-int Gcd(int a, int b)
-{
-	// Alternative for a while (true)
-	// This could also be implemented using recursion,
-	// I've gone with looping here since the code is
-	// similarly clear (IMO) and this uses less of the
-	// call stack.
-    for (;;) {
-        if (a == 0) {
-			return b;
-		}
-        b %= a;
+// Greatest common divisor
+////template<typename T>
+////typename enable_if<is_integral<T>::value, T>::type Gcd(T a, T b)
+////{
+////	// Alternative for a while (true)
+////	// This could also be implemented using recursion,
+////	// I've gone with looping here since the code is
+////	// similarly clear (IMO) and this uses less of the
+////	// call stack.
+////    for (;;) {
+////        if (a == 0) {
+////			return b;
+////		}
+////        b %= a;
+////
+////        if (b == 0) {
+////			return a;
+////		}
+////        a %= b;
+////    }
+////}
 
-        if (b == 0) {
-			return a;
-		}
-        a %= b;
-    }
-}
+//////// Greatest common divisor using Euler's algorithm
+//////template <typename IntType>
+//////IntType Gcd(IntType a, IntType b)
+//////{
+//////	// Alternative for a while (true)
+//////	// This could also be implemented using recursion,
+//////	// I've gone with looping here since the code is
+//////	// similarly clear (IMO) and this uses less of the
+//////	// call stack.
+//////    for (;;) {
+//////        if (a == 0) {
+//////			return b;
+//////		}
+//////        b %= a;
+//////
+//////        if (b == 0) {
+//////			return a;
+//////		}
+//////        a %= b;
+//////    }
+//////}
+//////
+//////template int8_t Gcd<int8_t>(int8_t a, int8_t b);
+//////template int16_t Gcd<int16_t>(int16_t a, int16_t b);
+//////template int32_t Gcd<int32_t>(int32_t a, int32_t b);
+//////template int64_t Gcd<int64_t>(int64_t a, int64_t b);
+//////template uint8_t Gcd<uint8_t>(uint8_t a, uint8_t b);
+//////template uint16_t Gcd<uint16_t>(uint16_t a, uint16_t b);
+//////template uint32_t Gcd<uint32_t>(uint32_t a, uint32_t b);
+//////template uint64_t Gcd<uint64_t>(uint64_t a, uint64_t b);
 
 
 // Generate array of primes up to <limit> using the
 // Sieve of Eratosthenes method
-vector<unsigned> GeneratePrimesEratosthenes(unsigned limit)
+vector<PeUint> GeneratePrimesEratosthenes(PeUint limit)
 {
 	// Quick exits for first few cases
 	if (limit < 2) {
-		return vector<unsigned>();
+		return vector<PeUint>();
 	} else if (limit == 2) {
-		return vector<unsigned>({2});
+		return vector<PeUint>({2});
 	} else if (limit <= 4) { // Catch both 3 and 4
-		return vector<unsigned>({2, 3});
+		return vector<PeUint>({2, 3});
 	} else if (limit <= 6) { // Catch both 5 and 6
-		return vector<unsigned>({2, 3, 5});
+		return vector<PeUint>({2, 3, 5});
 	} else if (limit <= 10) { // Catch 7-10
-		return vector<unsigned>({2, 3, 5, 7});
+		return vector<PeUint>({2, 3, 5, 7});
 	} else { // Ok, time to do actual calculation...
 
 		// First, an estimate for the size of the array.
@@ -258,11 +294,11 @@ vector<unsigned> GeneratePrimesEratosthenes(unsigned limit)
 		//   Rosser, J. Barkley; Schoenfeld, Lowell (1962).
 		//   "Approximate formulas for some functions of prime numbers".
 		//   Illinois J. Math. 6: 64–94. doi:10.1215/ijm/1255631807
-		unsigned num_primes =
-			(unsigned)(1.25506 * ((double)limit / log((double)limit)));
+		PeUint num_primes =
+			(PeUint)(1.25506 * ((double)limit / log((double)limit)));
 
 		// Set up the primes array
-		vector<unsigned> primes_array;
+		vector<PeUint> primes_array;
 		primes_array.reserve(num_primes);
 
 		// Set up an array of flags
@@ -277,9 +313,9 @@ vector<unsigned> GeneratePrimesEratosthenes(unsigned limit)
 		// then starting at 3, mark off 3, 6, 9, 12...
 		// then starting at 5 (skip 4 because it's already been marked non-prime)
 		// then starting at 7 and so on
-		unsigned p = 2;
-		unsigned p2 = 4;
-		unsigned j = p2;
+		PeUint p = 2;
+		PeUint p2 = 4;
+		PeUint j = p2;
 
 		while (p2 <= limit) { // Only check to sqrt(limit)
 			j = p2;
@@ -300,7 +336,7 @@ vector<unsigned> GeneratePrimesEratosthenes(unsigned limit)
 		}
 
 		// Find remaining primes greater than sqrt(limit)
-		for (unsigned i = p; i <= limit; ++i) {
+		for (PeUint i = p; i <= limit; ++i) {
 			if (is_prime[i]) {
 				primes_array.push_back(i);
 			}
@@ -313,19 +349,19 @@ vector<unsigned> GeneratePrimesEratosthenes(unsigned limit)
 
 // Generate array of primes up to <limit> using the
 // Sieve of Sundaram method
-vector<unsigned> GeneratePrimesSundaram(unsigned limit)
+vector<PeUint> GeneratePrimesSundaram(PeUint limit)
 {
 	// Quick exits for first few cases
 	if (limit < 2) {
-		return vector<unsigned>();
+		return vector<PeUint>();
 	} else if (limit == 2) {
-		return vector<unsigned>({2});
+		return vector<PeUint>({2});
 	} else if (limit <= 4) { // Catch both 3 and 4
-		return vector<unsigned>({2, 3});
+		return vector<PeUint>({2, 3});
 	} else if (limit <= 6) { // Catch both 5 and 6
-		return vector<unsigned>({2, 3, 5});
+		return vector<PeUint>({2, 3, 5});
 	} else if (limit <= 10) { // Catch 7-10
-		return vector<unsigned>({2, 3, 5, 7});
+		return vector<PeUint>({2, 3, 5, 7});
 	} else { // Ok, time to do actual calculation...
 
 		// First, an estimate for the size of the array.
@@ -335,23 +371,23 @@ vector<unsigned> GeneratePrimesSundaram(unsigned limit)
 		//   Rosser, J. Barkley; Schoenfeld, Lowell (1962).
 		//   "Approximate formulas for some functions of prime numbers".
 		//   Illinois J. Math. 6: 64–94. doi:10.1215/ijm/1255631807
-		unsigned num_primes =
-			(unsigned)(1.25506 * ((double)limit / log((double)limit)));
+		PeUint num_primes =
+			(PeUint)(1.25506 * ((double)limit / log((double)limit)));
 
 		// Set up the primes array
-		vector<unsigned> primes_array;
+		vector<PeUint> primes_array;
 		primes_array.reserve(num_primes);
 		primes_array.push_back(2);
 
 		// Set up an array of flags
 		vector<bool> base_candidates(limit / 2, true);
 
-		unsigned k = limit / 3; // Integer division
+		PeUint k = limit / 3; // Integer division
 
 		// Sieve of Sundaram
 		// Mark off odd integers of the form i + j + 2ij
-		for (unsigned j = 1; j < k; ++j) {
-			for (unsigned i = 1; i <= j; ++i) {
+		for (PeUint j = 1; j < k; ++j) {
+			for (PeUint i = 1; i <= j; ++i) {
 				if (i + j + 2 * i * j >= base_candidates.size()) {
 					break;
 				}
@@ -359,7 +395,7 @@ vector<unsigned> GeneratePrimesSundaram(unsigned limit)
 			}
 		}
 
-		for (unsigned i = 1; i < base_candidates.size(); ++i) {
+		for (PeUint i = 1; i < base_candidates.size(); ++i) {
 			if (base_candidates[i]) {
 				primes_array.push_back(2 * i + 1);
 			}
@@ -373,31 +409,31 @@ vector<unsigned> GeneratePrimesSundaram(unsigned limit)
 // Generate a Pythagorean triple determined by two integers (m, n) such that m > n.
 // If m <= n, they will be swapped. This method uses Euclid's formula:
 //		a = m^2 - n^2, b = 2*m*n, c = m^2 + n^2
-tuple<unsigned, unsigned, unsigned> GeneratePythagoreanEuclidTriple(
-	unsigned m, unsigned n, unsigned k)
+tuple<PeUint, PeUint, PeUint> GeneratePythagoreanEuclidTriple(
+	PeUint m, PeUint n, PeUint k)
 {
 	if ((k == 0) || (m == 0) || (n == 0)) {
-		return tuple<unsigned, unsigned, unsigned>(0, 0, 0);
+		return tuple<PeUint, PeUint, PeUint>(0, 0, 0);
 	}
 
 	// Ensure m > n
 	if (m <= n) {
-		unsigned tmp;
+		PeUint tmp;
 		tmp = m;
 		m = n;
 		n = tmp;
 	}
 
-	unsigned a = m * m - n * n,
+	PeUint a = m * m - n * n,
 		b = 2 * m * n,
 		c = m * m + n * n;
 
-	return tuple<unsigned, unsigned, unsigned>(k * a, k * b, k * c);
+	return tuple<PeUint, PeUint, PeUint>(k * a, k * b, k * c);
 }
 
 
 // Test if three integers (a,b,c) are a Pythagorean triple
-bool IsPythagoreanTriple(unsigned a, unsigned b, unsigned c)
+bool IsPythagoreanTriple(PeUint a, PeUint b, PeUint c)
 {
 	return (c * c == a * a + b * b);
 }
@@ -405,11 +441,66 @@ bool IsPythagoreanTriple(unsigned a, unsigned b, unsigned c)
 
 // Lowest common multiple
 // Lcm(a,b) = a*b/Gcd(a,b)
-int Lcm(int a, int b)
+PeUint Lcm(PeUint a, PeUint b)
 {
-    int temp = Gcd(a, b);
+    PeUint temp = Gcd(a, b);
 
     return temp ? (a / temp * b) : 0;
+}
+
+
+// Find "N choose K", sometimes also written nCk, the number of possible
+// combinations of k items from a set of n items.
+// Using PeUint (64 bit unsigned) this will first overflow at n = 67, k = 32.
+// Values of n < 67 won't overflow for any valid k.
+PeUint NChooseK(PeUint n, PeUint k)
+{
+	// Sanity check
+	if (k > n) {
+		return 0;
+	}
+
+	// Some quick exits
+	
+	// nC0 = nCn = 1
+	if ((k == 0) || (k == n)) {
+		return 1;
+	}
+
+	// nC1 = nC(n-1) = n
+	if ((k == 1) || (k == (n - 1))) {
+		return n;
+	}
+
+    // num holds the value of n! (the numerator)
+    // den holds the value of k! (the denominator)
+    PeUint num = 1, den = 1;
+
+
+    // Since nCk = nC(n-k), we choose the smaller value of k and n-k to reduce
+	// the chances of overflow and shorten the while loop
+    if (k > (n - k)) {
+        k = n - k;
+	}
+
+	// Loop down from k...1 to iteratively calculate the numerator and denominator
+    while (k > 0) {
+        num *= n;
+        den *= k;
+
+        // Divide both numerator and denominator by their GCD.
+		// This keeps the values smaller which further reduces the chances
+		// of overflow
+        PeUint m = Gcd(num, den);
+
+        num /= m;
+        den /= m;
+
+        --n;
+        --k;
+    }
+
+    return num;
 }
 
 
@@ -418,15 +509,15 @@ int Lcm(int a, int b)
 // Note this is not the most efficient algorithm out there,
 // but it's reasonably simple and has a decent runtime for smaller
 // numbers.
-vector<unsigned> PrimeFactors(unsigned trial_number)
+vector<PeUint> PrimeFactors(PeUint trial_number)
 {
 	// Bigger bases could be used for larger data types, but we'll
 	// just stick with this basis for now
-	const vector<unsigned> basis({2, 3, 5});
+	const vector<PeUint> basis({2, 3, 5});
 
 	// Vector to store factors
 	// N.B. could be modified to only store the maximum
-	vector<unsigned> factors;
+	vector<PeUint> factors;
 
 
 	// Trial division by the basis primes
@@ -443,14 +534,14 @@ vector<unsigned> PrimeFactors(unsigned trial_number)
 	}
 
 	// The modulo (product) of the basis primes
-	unsigned basis_mod = 30;
+	PeUint basis_mod = 30;
 
 	// Increments for the wheel spokes (hard coded since the basis is hard coded)
-	vector<unsigned> increments({4, 2, 4, 2, 4, 6, 2, 6});
+	vector<PeUint> increments({4, 2, 4, 2, 4, 6, 2, 6});
 	size_t i = 0; // Increment index
 
 	// Starting point for the wheel
-	unsigned k = 7;
+	PeUint k = 7;
 
 	// If our current trial number lies in the first rotation of the wheel then it
 	// must be a smaller prime
@@ -504,9 +595,9 @@ vector<unsigned> PrimeFactors(unsigned trial_number)
 
 
 // Reverse an integers digits, useful for testing palindromes
-int ReverseDigits(int num)
+PeUint ReverseDigits(PeUint num)
 {
-    int rev_num = 0;
+    PeUint rev_num = 0;
     while (num > 0) {
         rev_num = 10 * rev_num + num % 10;
         num /= 10; // Integer division
@@ -516,21 +607,21 @@ int ReverseDigits(int num)
 
 // The nth pyramid number, the sum of integers from 1 to n
 // Uses the analytic formula sum = (n*(n+1))/2
-int SumOfOneToN(int n)
+PeUint SumOfOneToN(PeUint n)
 {
 	return n * (n + 1) / 2;
 }
 
 // The sum of squared integers: 1^2 + 2^2 + ... n^2
 // Uses the analytic formula sum = (n*(n+1)*(2*n+1))/6
-int SumOfSquaresOneToN(int n)
+PeUint SumOfSquaresOneToN(PeUint n)
 {
 	return n * (n + 1) * (2 * n + 1) / 6;
 }
 
 // The sum of squared integers: 1^3 + 2^3 + ... n^3
 // Uses the analytic formula sum = (n*n*(n+1)*(n+1))/4
-int SumOfCubesOneToN(int n)
+PeUint SumOfCubesOneToN(PeUint n)
 {
 	// This is the same polynomial in Horner form
 	return n * n * (1 + n * (2 + n)) / 4;

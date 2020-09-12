@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem12.cpp
+//
+// "Highly divisible triangular number"
+
 #include "PeProblem12.h"
 
 using namespace std;
@@ -7,11 +13,11 @@ namespace pe {
 // As usual, a brute force method to begin:
 // Generate successive triangle/pyramid numbers and factorise
 // them until we find one with more factors than the target
-static unsigned Method1(const unsigned target_divisor_count)
+static PeUint Method1(const PeUint target_divisor_count)
 {
-	unsigned divisor_count = 1; // Stores the length of the factors vector
-	unsigned target_number = 1; // The current triangle number
-	unsigned i_triangle = 1; // Used to generate the triangle number
+	PeUint divisor_count = 1; // Stores the length of the factors vector
+	PeUint target_number = 1; // The current triangle number
+	PeUint i_triangle = 1; // Used to generate the triangle number
 
 	// Break this loop once we have more factors than the
 	// target requirement
@@ -22,7 +28,7 @@ static unsigned Method1(const unsigned target_divisor_count)
 
 		// Find its factors and count how many there are
 		const auto factor_vec = math::Factors(target_number);
-		divisor_count = (unsigned)factor_vec.size();
+		divisor_count = static_cast<PeUint>(factor_vec.size());
 	}
 
 	return target_number;
@@ -32,11 +38,11 @@ static unsigned Method1(const unsigned target_divisor_count)
 // the code such as iteratively updating a pyramid/triangle
 // number as a cumulative sum rather than calculating it from
 // scratch at each time step.
-static unsigned Method2(const unsigned target_divisor_count)
+static PeUint Method2(const PeUint target_divisor_count)
 {
-	unsigned divisor_count = 1; // Stores the length of the factors vector
-	unsigned target_number = 1; // The current triangle number
-	unsigned i_triangle = 1; // Used to generate the triangle number
+	PeUint divisor_count = 1; // Stores the length of the factors vector
+	PeUint target_number = 1; // The current triangle number
+	PeUint i_triangle = 1; // Used to generate the triangle number
 
 	// Break this loop once we have more factors than the
 	// target requirement
@@ -52,9 +58,9 @@ static unsigned Method2(const unsigned target_divisor_count)
 		// For any lower factor, the upper factor is trial_number / lower_factor
 		// We only need to count factors so we can just increment the factor count
 		// by 2 for each new lower factor found.
-		unsigned int_sqrt = (unsigned)(sqrt((double)target_number));
+		PeUint uint_sqrt = static_cast<PeUint>(sqrt(double(target_number)));
 
-		for (unsigned i = 2; i <= int_sqrt; ++i) {
+		for (PeUint i = 2; i <= uint_sqrt; ++i) {
 			if (target_number % i == 0) {
 				divisor_count += 2;
 			}
@@ -62,9 +68,9 @@ static unsigned Method2(const unsigned target_divisor_count)
 			// A special check for an integer square root is needed, as this only
 			// counts as one factor rather than two.
 			// Note we need to verify that the target number is actually a
-			// square number, since the "int_sqrt" value we use is the integer
+			// square number, since the "uint_sqrt" value we use is the integer
 			// cast of the (possibly non-integer) square root.
-			if ((i == int_sqrt) && (target_number % int_sqrt == 0)) {
+			if ((i == uint_sqrt) && (target_number % uint_sqrt == 0)) {
 				--divisor_count;
 			}
 		}
@@ -79,7 +85,7 @@ static unsigned Method2(const unsigned target_divisor_count)
 // We can use this to reduce the size of the factorisation problem, particularly
 // since the two integer factors (n) and (n+1) will not be "trivial" factors i.e.
 // for large numbers they won't be e.g. 2, 3 etc.
-static unsigned Method3(const unsigned target_divisor_count)
+static PeUint Method3(const PeUint target_divisor_count)
 {
 	// Quick exit for a target of 0 or 1
 	if (target_divisor_count < 2) {
@@ -96,10 +102,10 @@ static unsigned Method3(const unsigned target_divisor_count)
 	}
 
 
-	unsigned divisor_count = 2; // Stores the length of the factors vector
-	unsigned i_triangle = 2; // Used to generate the triangle number
+	PeUint divisor_count = 2; // Stores the length of the factors vector
+	PeUint i_triangle = 2; // Used to generate the triangle number
 
-	unsigned tri_factor1 = 1, tri_factor2 = 3,
+	PeUint tri_factor1 = 1, tri_factor2 = 3,
 		tri_div_count1 = 1, tri_div_count2 = 2;
 
 	// Break this loop once we have more factors than the
@@ -131,7 +137,7 @@ static unsigned Method3(const unsigned target_divisor_count)
 
 
 		// Factor 1
-		for (unsigned i = 2; i * i <= tri_factor1; ++i) {
+		for (PeUint i = 2; i * i <= tri_factor1; ++i) {
 			if (tri_factor1 % i == 0) {
 				tri_div_count1 += 2;
 			}
@@ -142,7 +148,7 @@ static unsigned Method3(const unsigned target_divisor_count)
 		}
 		
 		// Factor 2
-		for (unsigned i = 2; i * i <= tri_factor2; ++i) {
+		for (PeUint i = 2; i * i <= tri_factor2; ++i) {
 			if (tri_factor2 % i == 0) {
 				tri_div_count2 += 2;
 			}
@@ -162,11 +168,6 @@ static unsigned Method3(const unsigned target_divisor_count)
 	}
 
 	return tri_factor1 * tri_factor2;
-}
-
-
-PeProblem12::PeProblem12()
-{
 }
 
 
@@ -199,7 +200,7 @@ ostream &PeProblem12::DisplaySolution(ostream &os)
 {
 	// Searching for 2000 divisors gives T_n near 2*10^9,
 	// so much higher than that will probably lead to overflow
-	const unsigned kTargetDivisorCount = 500;
+	const PeUint kTargetDivisorCount = 500;
 	auto target_triangle_number1 = Method1(kTargetDivisorCount);
 	auto target_triangle_number2 = Method2(kTargetDivisorCount);
 	auto target_triangle_number3 = Method3(kTargetDivisorCount);
@@ -250,7 +251,7 @@ ostream &PeProblem12::ProfileSolutions(int n_trials, ostream &os)
 
 	// 2000 gives T_n near 2*10^9, so much higher will probably lead to overflow
 	const int kTargetDivisorCount = 300;
-	unsigned target_triangle_number1 = 0,
+	PeUint target_triangle_number1 = 0,
 		target_triangle_number2 = 0,
 		target_triangle_number3 = 0;
 

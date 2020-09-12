@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem4.h
+//
+// "Largest palindrome product"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem4: public PeProblem
 {
 public:
-	PeProblem4();
-
+	PeProblem4() {}
 	virtual ~PeProblem4() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem11.h
+//
+// "Largest product in a grid"
+
 #pragma once
 
 #include <array>
@@ -9,8 +15,7 @@ namespace pe {
 class PeProblem11: public PeProblem
 {
 public:
-	PeProblem11();
-
+	PeProblem11() {}
 	virtual ~PeProblem11() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

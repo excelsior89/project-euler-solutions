@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem1.cpp
+//
+// "Multiples of 3 and 5"
+
 #include "PeProblem1.h"
 
 using namespace std;
@@ -7,11 +13,11 @@ namespace pe {
 // The brute force solution: find the sum of multiples of a or b from 1 to limit
 // by checking every integer from 1 to limit for divisibility and adding it to
 // the sum if it's divisible by a or b
-static int Method1(int limit, int a, int b)
+static PeUint Method1(PeUint limit, PeUint a, PeUint b)
 {
-	int cumulative_sum = 0;
+	PeUint cumulative_sum = 0;
 
-	for (int i = 0; i < limit; ++i) {
+	for (PeUint i = 0; i < limit; ++i) {
 		if (((i % a) == 0) || ((i % b) == 0)) {
 			cumulative_sum += i;
 		}
@@ -22,26 +28,22 @@ static int Method1(int limit, int a, int b)
 
 // A less iterative solution
 // The sum of multiples of a
-static int Method2(int limit, int a, int b)
+static PeUint Method2(PeUint limit, PeUint a, PeUint b)
 {
 	// Decrement limit for use in the below calculations
 	// since we want to sum up to but not including the limit
 	--limit;
 
-	int lcm_ab = math::Lcm(a, b),
+	PeUint lcm_ab = math::Lcm(a, b),
 		// Intentional integer division
 		a_lim = limit / a, b_lim = limit / b,
 		ab_lim = limit / lcm_ab;
 
-	int sa = a * (a_lim * a_lim + a_lim) / 2,
+	PeUint sa = a * (a_lim * a_lim + a_lim) / 2,
 		sb = b * (b_lim * b_lim + b_lim) / 2,
 		sab = lcm_ab * (ab_lim * ab_lim + ab_lim) / 2;
 
 	return sa + sb - sab;
-}
-
-PeProblem1::PeProblem1()
-{
 }
 
 

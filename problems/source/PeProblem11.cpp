@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem11.cpp
+//
+// "Largest product in a grid"
+
 #include "PeProblem11.h"
 
 using namespace std;
@@ -5,7 +11,7 @@ using namespace std;
 namespace pe {
 
 // The search grid, stored in row-major form
-const unsigned kNumberGrid[] = {
+const PeUint kNumberGrid[] = {
 	 8,  2, 22, 97, 38, 15,  0, 40,  0, 75,  4,  5,  7, 78, 52, 12, 50, 77, 91,  8,
 	49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48,  4, 56, 62,  0,
 	81, 49, 31, 73, 55, 79, 14, 29, 93, 71, 40, 67, 53, 88, 30,  3, 49, 13, 36, 65,
@@ -28,23 +34,23 @@ const unsigned kNumberGrid[] = {
 	 1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52,  1, 89, 19, 67, 48
 };
 
-const unsigned kGridWidth = (unsigned)sqrt(sizeof(kNumberGrid) / sizeof(unsigned));
-const unsigned kGridHeight = kGridWidth;
-const unsigned kSetSize = 4;
+const PeUint kGridWidth = static_cast<PeUint>(sqrt(sizeof(kNumberGrid) / sizeof(PeUint)));
+const PeUint kGridHeight = kGridWidth;
+const PeUint kSetSize = 4;
 
 // Brute force solution
 // Test all possible adjacent sets of digits vertically, horizontally and diagonally
 // and record the maximum
-static unsigned Method1(const unsigned number_grid[], const unsigned height,
-	const unsigned width, const unsigned set_size)
+static PeUint Method1(const PeUint number_grid[], const PeUint height,
+	const PeUint width, const PeUint set_size)
 {
-	unsigned max_product = 0, ibase = 0;
+	PeUint max_product = 0, ibase = 0;
 	// 4 temporary values for the row, column and two diagonal values to check
-	vector<unsigned> tmp_products({1,1,1,1});
+	vector<PeUint> tmp_products({1,1,1,1});
 
 
-	for (unsigned irow = 0; irow < height - set_size; ++irow) {
-		for (unsigned icol = 0; icol < width - set_size; ++icol) {
+	for (PeUint irow = 0; irow < height - set_size; ++irow) {
+		for (PeUint icol = 0; icol < width - set_size; ++icol) {
 			// This is the reference cell for the vertical, horizontal and
 			// diagonal calculations
 			ibase = icol + width * irow;
@@ -55,7 +61,7 @@ static unsigned Method1(const unsigned number_grid[], const unsigned height,
 			tmp_products[2] = 1;
 			tmp_products[3] = 1;
 
-			for (unsigned iset = 0; iset < set_size; ++iset) {
+			for (PeUint iset = 0; iset < set_size; ++iset) {
 				// Row forward
 				tmp_products[0] *= number_grid[ibase + iset];
 
@@ -77,8 +83,8 @@ static unsigned Method1(const unsigned number_grid[], const unsigned height,
 	}
 
 	// "Edge case" 1: Columns at the right side (no room for rows or diagonals)
-	for (unsigned irow = 0; irow < height - set_size; ++irow) {
-		for (unsigned icol = width - set_size; icol < width; ++icol) {
+	for (PeUint irow = 0; irow < height - set_size; ++irow) {
+		for (PeUint icol = width - set_size; icol < width; ++icol) {
 			// This is the reference cell for the vertical, horizontal and
 			// diagonal calculations
 			ibase = icol + width * irow;
@@ -86,7 +92,7 @@ static unsigned Method1(const unsigned number_grid[], const unsigned height,
 			// Reset temporary products
 			tmp_products[0] = 1;
 
-			for (unsigned iset = 0; iset < set_size; ++iset) {
+			for (PeUint iset = 0; iset < set_size; ++iset) {
 				// Column down
 				tmp_products[0] *= number_grid[ibase + width * iset];
 			}
@@ -97,8 +103,8 @@ static unsigned Method1(const unsigned number_grid[], const unsigned height,
 	}
 
 	// "Edge case" 2: Rows at the bottom (no room for columns or diagonals)
-	for (unsigned icol = 0; icol < width - set_size; ++icol) {
-		for (unsigned irow = height - set_size; irow < height; ++irow) {
+	for (PeUint icol = 0; icol < width - set_size; ++icol) {
+		for (PeUint irow = height - set_size; irow < height; ++irow) {
 			// This is the reference cell for the vertical, horizontal and
 			// diagonal calculations
 			ibase = icol + width * irow;
@@ -106,7 +112,7 @@ static unsigned Method1(const unsigned number_grid[], const unsigned height,
 			// Reset temporary products
 			tmp_products[0] = 1;
 
-			for (unsigned iset = 0; iset < set_size; ++iset) {
+			for (PeUint iset = 0; iset < set_size; ++iset) {
 				// Row forward
 				tmp_products[0] *= number_grid[ibase + iset];
 			}
@@ -122,18 +128,18 @@ static unsigned Method1(const unsigned number_grid[], const unsigned height,
 // Still a rather brute force method, but just to be different, in this method
 // we search the row, column and diagonal spaces separately and attempt to skip
 // over any zeroes found
-static unsigned Method2(const unsigned number_grid[], const unsigned height,
-	const unsigned width, const unsigned set_size)
+static PeUint Method2(const PeUint number_grid[], const PeUint height,
+	const PeUint width, const PeUint set_size)
 {
-	unsigned max_product = 0, tmp_product1 = 1, tmp_product2 = 1;
+	PeUint max_product = 0, tmp_product1 = 1, tmp_product2 = 1;
 
 	// Column products
-	for (unsigned icol = 0; icol < width; ++icol) {
-		for (unsigned irow = 0; irow < height - set_size; ++irow) {
+	for (PeUint icol = 0; icol < width; ++icol) {
+		for (PeUint irow = 0; irow < height - set_size; ++irow) {
 			// Reset temporary product
 			tmp_product1 = 1;
 
-			for (unsigned iset = 0; iset < set_size; ++iset) {
+			for (PeUint iset = 0; iset < set_size; ++iset) {
 				// Column down
 				tmp_product1 *= number_grid[width * irow + icol + iset * width];
 
@@ -161,12 +167,12 @@ static unsigned Method2(const unsigned number_grid[], const unsigned height,
 
 	// Row products
 	// N.B. swapping outer and inner loops compared to column search above
-	for (unsigned irow = 0; irow < height; ++irow) {
-		for (unsigned icol = 0; icol < width - set_size; ++icol) {
+	for (PeUint irow = 0; irow < height; ++irow) {
+		for (PeUint icol = 0; icol < width - set_size; ++icol) {
 			// Reset temporary product
 			tmp_product1 = 1;
 
-			for (unsigned iset = 0; iset < set_size; ++iset) {
+			for (PeUint iset = 0; iset < set_size; ++iset) {
 				// Column down
 				tmp_product1 *= number_grid[width * irow + icol + iset];
 
@@ -188,13 +194,13 @@ static unsigned Method2(const unsigned number_grid[], const unsigned height,
 	}
 
 	// Diagonal products
-	for (unsigned icol = 0; icol < width - set_size; ++icol) {
-		for (unsigned irow = 0; irow < height - set_size; ++irow) {
+	for (PeUint icol = 0; icol < width - set_size; ++icol) {
+		for (PeUint irow = 0; irow < height - set_size; ++irow) {
 			// Reset temporary products
 			tmp_product1 = 1;
 			tmp_product2 = 1;
 
-			for (unsigned iset = 0; iset < set_size; ++iset) {
+			for (PeUint iset = 0; iset < set_size; ++iset) {
 				// Top left bottom right
 				tmp_product1 *= number_grid[width * irow + icol + iset * (width + 1)];
 				// Top right bottom left
@@ -216,11 +222,6 @@ static unsigned Method2(const unsigned number_grid[], const unsigned height,
 	}
 
 	return max_product;
-}
-
-
-PeProblem11::PeProblem11()
-{
 }
 
 
@@ -292,8 +293,8 @@ ostream &PeProblem11::ProfileSolutions(int n_trials, ostream &os)
 {
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const unsigned kGrid = 1000000;
-	unsigned max_prod1 = 0, max_prod2 = 0;
+	const PeUint kGrid = 1000000;
+	PeUint max_prod1 = 0, max_prod2 = 0;
 
 	clock_t start_time(clock());
 	for (int i = 0; i < n_trials; ++i) {

@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem6.h
+//
+// "Sum square difference"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem6: public PeProblem
 {
 public:
-	PeProblem6();
-
+	PeProblem6() {}
 	virtual ~PeProblem6() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

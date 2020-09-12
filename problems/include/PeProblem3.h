@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem3.h
+//
+// "Largest prime factor"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem3: public PeProblem
 {
 public:
-	PeProblem3();
-
+	PeProblem3() {}
 	virtual ~PeProblem3() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

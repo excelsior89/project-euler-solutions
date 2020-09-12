@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem10.h
+//
+// "Summation of primes"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem10: public PeProblem
 {
 public:
-	PeProblem10();
-
+	PeProblem10() {}
 	virtual ~PeProblem10() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

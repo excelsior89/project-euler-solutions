@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem9.h
+//
+// "Special Pythagorean triplet"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem9: public PeProblem
 {
 public:
-	PeProblem9();
-
+	PeProblem9() {}
 	virtual ~PeProblem9() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

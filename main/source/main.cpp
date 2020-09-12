@@ -1,3 +1,10 @@
+// Copyright 2020 Paul Robertson
+//
+// main.cpp
+//
+// Entry point for the Project Euler solutions project
+
+
 #include <iostream>
 
 #include "PeProblemSelector.h"
@@ -16,6 +23,7 @@ int main(int argc, char *argv[])
 
 	cout << "---- Project Euler Solutions ----" << endl << endl;
 
+	// Loop until exit
 	for (;;) {
 		problem_number = 0;
 		profile_n_trials = 0;

@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem8.h
+//
+// "Largest product in a series"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem8: public PeProblem
 {
 public:
-	PeProblem8();
-
+	PeProblem8() {}
 	virtual ~PeProblem8() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

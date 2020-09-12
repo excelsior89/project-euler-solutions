@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem5.h
+//
+// "Smallest multiple"
+
 #pragma once
 
 #include <map>
@@ -9,8 +15,7 @@ namespace pe {
 class PeProblem5: public PeProblem
 {
 public:
-	PeProblem5();
-
+	PeProblem5() {}
 	virtual ~PeProblem5() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

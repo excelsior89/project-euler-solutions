@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem12.h
+//
+// "Highly divisible triangular number"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem12: public PeProblem
 {
 public:
-	PeProblem12();
-
+	PeProblem12() {}
 	virtual ~PeProblem12() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

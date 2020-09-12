@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblemSelector.h
+//
+// Problem selector helper class
+
 #pragma once
 
 #include <iostream>

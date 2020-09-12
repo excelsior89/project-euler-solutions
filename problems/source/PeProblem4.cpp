@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem4.cpp
+//
+// "Largest palindrome product"
+
 #include "PeProblem4.h"
 
 using namespace std;
@@ -8,10 +14,10 @@ namespace pe {
 // so far. The search space is exhaustive, so the largest palindrome
 // will be guaranteed to be found by the end of the search.
 // Runtime is O(10^2n), so not good.
-static int Method1(int digit_size)
+static PeUint Method1(PeUint digit_size)
 {
-	int start_value = (int)pow(10, digit_size) - 1;
-	int end_value = (int)pow(10, digit_size - 1);
+	PeUint start_value = static_cast<PeUint>(pow(10, digit_size) - 1);
+	PeUint end_value = static_cast<PeUint>(pow(10, digit_size - 1));
 
 	// Initialise with smallest possible palindrome
 	// 1[0...]1 * 1[0...]1
@@ -19,13 +25,13 @@ static int Method1(int digit_size)
 	// 2 digits --> 11*11 = 121
 	// 3 digits --> 101*101 = 10201
 	// 4 digits --> 1001*1001 = 1002001
-	int largest_palindrome = (end_value + 1) * (end_value + 1);
+	PeUint largest_palindrome = (end_value + 1) * (end_value + 1);
 
 	// Loop over the trial pairs. Since multiplication is commutative,
 	// we only need to check j = [i...end], which halves the number
 	// of values we need to test.
-	for (int i = start_value; i > end_value; --i) {
-		for (int j = i; j > end_value; --j) {
+	for (PeUint i = start_value; i > end_value; --i) {
+		for (PeUint j = i; j > end_value; --j) {
 			if (math::ReverseDigits(i * j) == i * j) {
 				largest_palindrome = largest_palindrome < i * j ? i * j : largest_palindrome;
 			}
@@ -38,7 +44,7 @@ static int Method1(int digit_size)
 
 // Brute-force top-down approach:
 // Generate palindromic numbers and factorise
-static int Method2(unsigned digit_size)
+static PeUint Method2(PeUint digit_size)
 {
 	// We can generate palindromic numbers as:
 	// 10^n*(abc...) + (...cba)
@@ -52,12 +58,12 @@ static int Method2(unsigned digit_size)
 	// the palindromes in descending order, so the first valid
 	// one we find will be the largest and we can stop looking
 
-	unsigned upper_ten_base = (unsigned)pow(10, digit_size);
-	unsigned lower_ten_base = (unsigned)pow(10, digit_size - 1);
+	PeUint upper_ten_base = static_cast<PeUint>(pow(10, digit_size));
+	PeUint lower_ten_base = static_cast<PeUint>(pow(10, digit_size - 1));
 
-	for (unsigned i = upper_ten_base - 1; i > lower_ten_base; --i) {
+	for (PeUint i = upper_ten_base - 1; i > lower_ten_base; --i) {
 		// Generate the palindrome number
-		unsigned palindrome_number = upper_ten_base * i + math::ReverseDigits(i);
+		PeUint palindrome_number = upper_ten_base * i + math::ReverseDigits(i);
 
 		// Factorise the palindrome number
 		auto factors = math::Factors(palindrome_number);
@@ -85,9 +91,9 @@ static int Method2(unsigned digit_size)
 	// Example:
 	// from 856 we generate:
 	// 100*856+58 = 85600+58 = 85658
-	for (unsigned i = upper_ten_base - 1; i > lower_ten_base; --i) {
+	for (PeUint i = upper_ten_base - 1; i > lower_ten_base; --i) {
 		// Generate the palindrome number (note integer division)
-		unsigned palindrome_number = lower_ten_base * i + math::ReverseDigits(i / 10);
+		PeUint palindrome_number = lower_ten_base * i + math::ReverseDigits(i / 10);
 
 		// Factorise the palindrome number
 		auto factors = math::Factors(palindrome_number);
@@ -127,7 +133,7 @@ static int Method2(unsigned digit_size)
 //		= 10*9^k*11^k + 10*C*9^(k-1)*11^(k-1) + ... + 10 + 1
 //		= 10*9^k*11^k + 10*C*9^(k-1)*11^(k-1) + ... + 11
 //		= 11*(10*9^k*11^(k-1) + 10*C*9^(k-1)*11^(k-2) + ... + 1)
-static int Method3(unsigned digit_size)
+static PeUint Method3(PeUint digit_size)
 {
 	// We can generate palindromic numbers as:
 	// 10^n*(abc...) + (...cba)
@@ -141,17 +147,17 @@ static int Method3(unsigned digit_size)
 	// the palindromes in descending order, so the first valid
 	// one we find will be the largest and we can stop looking
 
-	unsigned upper_ten_base = (unsigned)pow(10, digit_size);
-	unsigned lower_ten_base = (unsigned)pow(10, digit_size - 1);
-	unsigned palindrome_number = 0;
+	PeUint upper_ten_base = static_cast<PeUint>(pow(10, digit_size));
+	PeUint lower_ten_base = static_cast<PeUint>(pow(10, digit_size - 1));
+	PeUint palindrome_number = 0;
 
-	for (unsigned i = upper_ten_base - 1; i > lower_ten_base; --i) {
+	for (PeUint i = upper_ten_base - 1; i > lower_ten_base; --i) {
 		// Generate the palindrome number
 		palindrome_number = upper_ten_base * i + math::ReverseDigits(i);
 
 		// Since we known palindrome numbers are divisible by 11 (for even digits),
 		// we can search multiples of 11 as trial factors
-		for (unsigned j = upper_ten_base - 10; j > lower_ten_base; j -= 11) {
+		for (PeUint j = upper_ten_base - 10; j > lower_ten_base; j -= 11) {
 			if (palindrome_number % j == 0) { // Found a factor
 
 				// Does the n-digit factor have another n-digit number as
@@ -171,10 +177,6 @@ static int Method3(unsigned digit_size)
 	return (lower_ten_base + 1) * (lower_ten_base + 1);
 }
 
-PeProblem4::PeProblem4()
-{
-}
-
 
 ostream &PeProblem4::DisplayProblem(ostream &os)
 {
@@ -189,7 +191,7 @@ ostream &PeProblem4::DisplayProblem(ostream &os)
 
 ostream &PeProblem4::DisplaySolution(ostream &os)
 {
-	const int kDigitSize = 3;
+	const PeUint kDigitSize = 3;
 	os << formatting::SolutionHeader(kProblemNumber) << endl << endl <<
 		"Answer: " << Method1(kDigitSize) << endl << endl <<
 		formatting::MethodHeader(1) << endl << endl <<
@@ -227,7 +229,7 @@ ostream &PeProblem4::ProfileSolutions(int n_trials, ostream &os)
 {
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const int kDigitSize = 3;
+	const PeUint kDigitSize = 3;
 
 	clock_t start_time(clock());
 	for (int i = 0; i < n_trials; ++i) {

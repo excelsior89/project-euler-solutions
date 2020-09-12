@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem13.h
+//
+// "Large sum"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -11,7 +17,7 @@ namespace pe {
 class PeProblem13: public PeProblem
 {
 public:
-	PeProblem13();
+	PeProblem13() {}
 
 	virtual ~PeProblem13() {}
 

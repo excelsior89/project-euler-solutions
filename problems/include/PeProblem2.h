@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem2.h
+//
+// "Even Fibonacci numbers"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem2: public PeProblem
 {
 public:
-	PeProblem2();
-
+	PeProblem2() {}
 	virtual ~PeProblem2() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

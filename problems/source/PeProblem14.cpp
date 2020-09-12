@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem14.cpp
+//
+// "Longest Collatz sequence"
+
 #include "PeProblem14.h"
 
 using namespace std;
@@ -8,17 +14,17 @@ namespace pe {
 // the limit. Record the number of iterations needed to reach one for each
 // starting integer and return the integer whose sequence contained the most
 // terms.
-static long long unsigned Method1(long long unsigned start_number_limit,
-	vector<long long unsigned> &sequence)
+static PeUint Method1(PeUint start_number_limit,
+	vector<PeUint> &sequence)
 {
 	// Start at 1, with a sequence length of 1
-	long long unsigned max_length_start_number = 1;
-	long long unsigned max_sequence_length = 1;
+	PeUint max_length_start_number = 1;
+	PeUint max_sequence_length = 1;
 
 	// Check every integer up to the limit
-	for (long long unsigned i = 2; i < start_number_limit; ++i) {
-		long long unsigned tmp_number = i;
-		long long unsigned sequence_length = 1;
+	for (PeUint i = 2; i < start_number_limit; ++i) {
+		PeUint tmp_number = i;
+		PeUint sequence_length = 1;
 
 		// The Collatz iteration itself:
 		// If even, divide by 2
@@ -52,12 +58,12 @@ static long long unsigned Method1(long long unsigned start_number_limit,
 // already know how many more steps are required to reach 1, so we can stop
 // searching and simply add on the number of steps from the previously tested
 // number.
-static long long unsigned Method2(long long unsigned start_number_limit,
-	vector<long long unsigned> &sequence)
+static PeUint Method2(PeUint start_number_limit,
+	vector<PeUint> &sequence)
 {
 	// Start at 1, with a sequence length of 1
-	long long unsigned max_length_start_number = 1;
-	long long unsigned max_sequence_length = 1;
+	PeUint max_length_start_number = 1;
+	PeUint max_sequence_length = 1;
 
 	// Record the lengths of the sequences for any numbers used so far
 	// up to twice the start limit (a rather arbitrary choice but some
@@ -67,13 +73,13 @@ static long long unsigned Method2(long long unsigned start_number_limit,
 	// etc. over the large number of values is ultimately slower
 	// than using a vector with direct index access and limited,
 	// pre-allocated size.
-	vector<int> sequence_lengths(2 * start_number_limit, 0);
+	vector<PeUint> sequence_lengths(2 * start_number_limit, 0);
 	sequence_lengths[1] = 1;
 
 	// Check every integer up to the limit
-	for (long long unsigned i = 2; i < start_number_limit; ++i) {
-		long long unsigned tmp_number = i;
-		long long unsigned sequence_length = 1;
+	for (PeUint i = 2; i < start_number_limit; ++i) {
+		PeUint tmp_number = i;
+		PeUint sequence_length = 1;
 
 		// The Collatz iteration itself:
 		// If even, divide by 2
@@ -150,12 +156,12 @@ static long long unsigned Method2(long long unsigned start_number_limit,
 // By precomputing the values within 5 steps of 1, we instead identify 8 as
 // being in this set and can terminate the iterations and find the correct
 // sequence length.
-static long long unsigned Method3(long long unsigned start_number_limit,
-	vector<long long unsigned> &sequence, unsigned iterations_per_step = 5)
+static PeUint Method3(PeUint start_number_limit,
+	vector<PeUint> &sequence, PeUint iterations_per_step = 5)
 {
 	// Some "pre-precomputed" arrays for lower iterations per step
 	// A little bit of a "cheat" to extract more performance
-	static const vector<vector<unsigned>> c_pre = {
+	static const vector<vector<PeUint>> c_pre = {
 		{ // 2
 			0, 1, 1, 2
 		},
@@ -276,7 +282,7 @@ static long long unsigned Method3(long long unsigned start_number_limit,
 		}
 	};
 
-	static const vector<vector<unsigned>> d_pre = {
+	static const vector<vector<PeUint>> d_pre = {
 		{ // 2
 			0, 1, 2, 8
 		},
@@ -432,7 +438,7 @@ static long long unsigned Method3(long long unsigned start_number_limit,
 		}
 	};
 
-	static const vector<vector<unsigned>> three_pow_c_pre = {
+	static const vector<vector<PeUint>> three_pow_c_pre = {
 		{ // 2
 			1, 3, 3, 9
 		},
@@ -597,8 +603,8 @@ static long long unsigned Method3(long long unsigned start_number_limit,
 
 	// For k steps, we need 2^k precomputations and arrays of size 2^k
 
-	vector<unsigned> c, d, three_pow_c; // Arrays for precomputed c, d, 3^c
-	long long unsigned power_of_two = 1 << iterations_per_step;
+	vector<PeUint> c, d, three_pow_c; // Arrays for precomputed c, d, 3^c
+	PeUint power_of_two = 1 << iterations_per_step;
 
 	// Pick from available "pre-precomputed" arrays if we have them
 	if (iterations_per_step < c_pre.size() + 2) {
@@ -613,7 +619,7 @@ static long long unsigned Method3(long long unsigned start_number_limit,
 		three_pow_c.resize(power_of_two, 1);
 
 		// Compute k iterations for each integer from 0 to k
-		for (unsigned i = 1; i < power_of_two; ++i) {
+		for (PeUint i = 1; i < power_of_two; ++i) {
 			d[i] = i;
 
 			// Calculate k iterations of i, track
@@ -636,29 +642,29 @@ static long long unsigned Method3(long long unsigned start_number_limit,
 	// so we need to account for the possibility of up to twice the
 	// number of "short" iterations (in the case that every intermediate
 	// value is odd).
-	unordered_map<unsigned, unsigned> end_values =
+	unordered_map<PeUint, PeUint> end_values =
 		math::CollatzGraphIterations(2 * iterations_per_step);
 
 	// Start at 1, with a sequence length of 1
-	long long unsigned max_length_start_number = 1;
-	long long unsigned max_sequence_length = 1;
+	PeUint max_length_start_number = 1;
+	PeUint max_sequence_length = 1;
 
 	// Record the lengths of the sequences for any numbers used so far
 	// up to twice the start limit (a rather arbitrary choice but some
 	// of the numbers reached in these sequenences can become orders of
 	// magnitude larger and will rapidly use up available RAM).
-	vector<int> sequence_lengths(2 * start_number_limit, 0);
+	vector<PeUint> sequence_lengths(2 * start_number_limit, 0);
 	sequence_lengths[1] = 1;
 
 
 	// Check every integer up to the limit
-	for (long long unsigned i = 2; i < start_number_limit; ++i) {
-		long long unsigned current_term = i, next_term = 0,
+	for (PeUint i = 2; i < start_number_limit; ++i) {
+		PeUint current_term = i, next_term = 0,
 			sequence_length = 0;
 
 		// Store the most and least significant bits of the number
 		// in a (most significant) and b (least significant).
-		long long unsigned a = 0, b = 0;
+		PeUint a = 0, b = 0;
 
 		// The Collatz iterations
 		// Using an open loop that we break inside
@@ -724,10 +730,6 @@ static long long unsigned Method3(long long unsigned start_number_limit,
 	return max_length_start_number;
 }
 
-PeProblem14::PeProblem14()
-{
-}
-
 
 ostream &PeProblem14::DisplayProblem(ostream &os)
 {
@@ -749,8 +751,8 @@ ostream &PeProblem14::DisplayProblem(ostream &os)
 
 ostream &PeProblem14::DisplaySolution(ostream &os)
 {
-	const long long unsigned kStartingNumberLimit = 1000000;
-	vector<long long unsigned> maximum_sequence_1, maximum_sequence_2,
+	const PeUint kStartingNumberLimit = 1000000;
+	vector<PeUint> maximum_sequence_1, maximum_sequence_2,
 		maximum_sequence_3;
 	auto maxmimum_start_1 = Method1(kStartingNumberLimit, maximum_sequence_1);
 	auto maxmimum_start_2 = Method2(kStartingNumberLimit, maximum_sequence_2);
@@ -821,20 +823,16 @@ ostream &PeProblem14::DisplaySolution(ostream &os)
 
 ostream &PeProblem14::ProfileSolutions(int n_trials, ostream &os)
 {
-	const long long unsigned kStartingNumberLimit = 1000000;
+	const PeUint kStartingNumberLimit = 1000000;
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	long long unsigned max_start_1 = 0,
+	PeUint max_start_1 = 0,
 		max_start_2 = 0, max_start_3 = 0;
 
 	// The highest pre-precomputed number of steps to highlight
 	// the biggest advantage of Method 3 over Method 2
 	const unsigned method_3_k_steps = 10;
-	vector<long long unsigned> sequence_1, sequence_2, sequence_3;
-
-	/////
-	long long unsigned max_start_2a = 0;
-	vector<long long unsigned> sequence_2a;
+	vector<PeUint> sequence_1, sequence_2, sequence_3;
 
 	clock_t start_time(clock());
 	for (int i = 0; i < n_trials; ++i) {

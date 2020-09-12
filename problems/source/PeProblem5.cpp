@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem5.cpp
+//
+// "Smallest multiple"
+
 #include "PeProblem5.h"
 
 using namespace std;
@@ -130,11 +136,7 @@ static int Method3(int n)
 	
 	// Return the product of all the powers of primes using std::acculumate with
 	// std::multiples as the predicate
-	return accumulate(primes_to_n.begin(), primes_to_n.end(), 1, multiplies<unsigned>());
-}
-
-PeProblem5::PeProblem5()
-{
+	return accumulate(primes_to_n.begin(), primes_to_n.end(), PeUint(1), multiplies<PeUint>());
 }
 
 

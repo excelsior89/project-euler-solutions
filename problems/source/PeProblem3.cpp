@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem3.cpp
+//
+// "Largest prime factor"
+
 #include "PeProblem3.h"
 
 #include <numeric>
@@ -9,9 +15,9 @@ namespace pe {
 // check odd numbers up to sqrt(trial_number).
 // return the last number to successfully divide
 // the trial number.
-static long long int Method1(long long int trial_number)
+static PeUint Method1(PeUint trial_number)
 {
-	long long int factor = 1;
+	PeUint factor = 1;
 
 	if ((trial_number % 2) == 0) {
 		factor = 2;
@@ -20,9 +26,9 @@ static long long int Method1(long long int trial_number)
 		}
 	}
 
-	long long int trial_sqrt = (long long int)ceil(sqrt((double)trial_number));
+	PeUint trial_sqrt = (PeUint)ceil(sqrt((double)trial_number));
 
-	for (long long int i = 3; ((i < trial_sqrt) && (i < trial_number)); i += 2) {
+	for (PeUint i = 3; ((i < trial_sqrt) && (i < trial_number)); i += 2) {
 		if ((trial_number % i) == 0) {
 			factor = i;
 			while ((trial_number % factor) == 0) {
@@ -35,9 +41,10 @@ static long long int Method1(long long int trial_number)
 }
 
 // An improvement on Method1 using wheel factorisation
-static long long int Method2(long long int trial_number)
+static PeUint Method2(PeUint trial_number)
 {
 	/* AN INTERESTING SIDE NOTE BUT NOT PRACTICALLY USEFUL
+
 	// A heuristic for estimating the basis: the basis should consist of
 	// primes 1...n, where n is the length of the number's hexidecimal representation
 
@@ -48,11 +55,11 @@ static long long int Method2(long long int trial_number)
 	// American Journal of Mathematics. 63 (1): 211–232. doi:10.2307/2371291
 
 	// Get the length of the number in hex
-	double log16_trial = (unsigned)ceil(log2((double)(trial_number)) / 4.0);
+	double log16_trial = (PeUint)ceil(log2((double)(trial_number)) / 4.0);
 
 
 	if (log16_trial > 3.5) {
-		basis_limit = (long long int)(ceil(log16_trial*(log(log16_trial*log(log16_trial)))));
+		basis_limit = (PeUint)(ceil(log16_trial*(log(log16_trial*log(log16_trial)))));
 	}
 
 	// However, don't go overboard on how many primes to use in the basis,
@@ -67,23 +74,23 @@ static long long int Method2(long long int trial_number)
 	// This means a wheel modulo of 2310 with an increment vector of
 	// size 339. Far fewer checks than just testing odd numbers, but
 	// a bigger memory footprint with additional computational time in
-	// working out the basis increments, so possibly not worth it
+	// working out the basis increments, so possibly not worth it.
 
 	// Minimum basis is {2, 3, 5}
-	unsigned basis_limit = 5;
+	PeUint basis_limit = 5;
 
 	if (trial_number > 1e12) {
 		// Sieve function generates up to but not including the limit,
-		// set to one above the desired limit
+		// set to one above the desired limit.
 		basis_limit = 12;
 	}
 	
 
 	// Note that we could extend the basis limit above past 19, or probably
-	// tabulate the estimate of the nth prime3 for the limited number of lengths,
-	// but this is more here as a matter of curiosity.
-	// Also consider that for much bigger numbers, this isn't really the algorithm
-	// to use for factorisation in general
+	// tabulate the estimate of the nth prime for the limited number of lengths,
+	// but this is more here as a matter of curiosity. Also consider that for
+	// much bigger numbers, this isn't really the algorithm to use for
+	// factorisation in general.
 
 
 	// Generate the trial basis
@@ -91,11 +98,11 @@ static long long int Method2(long long int trial_number)
 
 	// Vector to store factors
 	// N.B. could be modified to only store the maximum
-	vector<long long int> factors;
+	vector<PeUint> factors;
 
 	// The modulo (product) of the basis primes
-	unsigned basis_mod = accumulate(basis.begin(), basis.end(),
-		1, multiplies<unsigned>());
+	PeUint basis_mod = accumulate(basis.begin(), basis.end(),
+		PeUint(1), multiplies<PeUint>());
 
 	// Trial division by the basis primes
 	for (size_t i = 0; i < basis.size(); ++i) {
@@ -125,7 +132,7 @@ static long long int Method2(long long int trial_number)
 
 	// Record the starting point of the wheel spokes
 	// (conveniently the adjacent difference function leaves this element unchanged)
-	long long int k = increments.front();
+	PeUint k = increments.front();
 	//... then remove it from the increments array
 	increments.erase(increments.begin());
 
@@ -155,10 +162,6 @@ static long long int Method2(long long int trial_number)
 	return (factors.back() > trial_number ? factors.back() : trial_number);
 }
 
-PeProblem3::PeProblem3()
-{
-}
-
 
 ostream &PeProblem3::DisplayProblem(ostream &os)
 {
@@ -172,7 +175,7 @@ ostream &PeProblem3::DisplayProblem(ostream &os)
 
 ostream &PeProblem3::DisplaySolution(ostream &os)
 {
-	const long long int kTrialNumber = 600851475143;
+	const PeUint kTrialNumber = 600851475143;
 	os << formatting::SolutionHeader(kProblemNumber) << endl << endl <<
 		"Answer: " << Method1(kTrialNumber) << endl << endl <<
 		formatting::MethodHeader(1) << endl << endl <<
@@ -207,7 +210,7 @@ ostream &PeProblem3::ProfileSolutions(int n_trials, ostream &os)
 {
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const long long int kTrialNumber = 600851475143;
+	const PeUint kTrialNumber = 600851475143;
 
 	clock_t start_time(clock());
 	for (int i = 0; i < n_trials; ++i) {

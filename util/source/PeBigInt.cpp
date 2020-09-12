@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeBigInt.cpp
+//
+// A custom arbitrary precision signed integer arithmetic class
+
 #include "PeBigInt.h"
 
 using namespace std;
@@ -39,7 +45,7 @@ PeBigInt::PeBigInt(long int val) :
 	fromSigned(val);
 }
 
-PeBigInt::PeBigInt(long long int val) :
+PeBigInt::PeBigInt(PeInt val) :
 	sign_(1)
 {
 	fromSigned(val);
@@ -57,7 +63,7 @@ PeBigInt::PeBigInt(long unsigned val) :
 	fromUnsigned(val);
 }
 	
-PeBigInt::PeBigInt(long long unsigned val) :
+PeBigInt::PeBigInt(PeUint val) :
 	sign_(1)
 {
 	fromUnsigned(val);
@@ -262,12 +268,12 @@ PeBigInt &PeBigInt::operator/=(const PeBigInt &rhs)
 // said data type
 	
 // Conversion to integer types
-PeBigInt::operator long long int() const
+PeBigInt::operator PeInt() const
 {
 	// Work out longest decimal size supported, subtracting one
 	// from the power of 2 since we only support the positive "half" of int range
 	size_t digitsize =
-		(size_t)floor((double)(8 * sizeof(long long int) - 1) * log10(2.0));
+		(size_t)floor((double)(8 * sizeof(PeInt) - 1) * log10(2.0));
 
 	// Too large, return maximum possible value
 	if (digits_.size() * kBasePower > digitsize) {
@@ -276,14 +282,14 @@ PeBigInt::operator long long int() const
 
 	// Definitely small enough, we can do a direct conversion
 	if (digits_.size() * kBasePower < digitsize) {
-		long long int sum = 0, base_mul = 1;
+		PeInt sum = 0, base_mul = 1;
 
 		for (const auto &ai : digits_) {
-			sum += base_mul * (long long int)ai;
+			sum += base_mul * (PeInt)ai;
 
 			// This can overflow on the last loop but
 			// won't be used after that so don't worry
-			base_mul *= (long long int)kBase;
+			base_mul *= (PeInt)kBase;
 		}
 
 		// Update the sign
@@ -304,14 +310,14 @@ PeBigInt::operator long long int() const
 	} else if (*this < PeBigInt(INTMAX_MIN)) {
 		return INTMAX_MIN;
 	} else {
-		long long int sum = 0, base_mul = 1;
+		PeInt sum = 0, base_mul = 1;
 
 		for (const auto &ai : digits_) {
-			sum += base_mul * (long long int)ai;
+			sum += base_mul * (PeInt)ai;
 
 			// This can overflow on the last loop but
 			// won't be used after that so don't worry
-			base_mul *= (long long int)kBase;
+			base_mul *= (PeInt)kBase;
 		}
 
 		// Update the sign
@@ -323,7 +329,7 @@ PeBigInt::operator long long int() const
 	}
 }
 
-PeBigInt::operator long long unsigned() const
+PeBigInt::operator PeUint() const
 {
 	// Quick check: return any negative numbers as 0
 	if (sign_ < 0) {
@@ -332,7 +338,7 @@ PeBigInt::operator long long unsigned() const
 
 	// Work out longest decimal size supported
 	size_t digitsize =
-		(size_t)floor((double)(8 * sizeof(long long unsigned)) * log10(2.0));
+		(size_t)floor((double)(8 * sizeof(PeUint)) * log10(2.0));
 
 	// Too large, return maximum possible value
 	if (digits_.size() * kBasePower > digitsize) {
@@ -341,14 +347,14 @@ PeBigInt::operator long long unsigned() const
 
 	// Definitely small enough, we can do a direct conversion
 	if (digits_.size() * kBasePower < digitsize) {
-		long long unsigned sum = 0, base_mul = 1;
+		PeUint sum = 0, base_mul = 1;
 
 		for (const auto &ai : digits_) {
-			sum += base_mul * (long long unsigned)ai;
+			sum += base_mul * (PeUint)ai;
 
 			// This can overflow on the last loop but
 			// won't be used after that so don't worry
-			base_mul *= (long long unsigned)kBase;
+			base_mul *= (PeUint)kBase;
 		}
 
 		return sum;
@@ -361,14 +367,14 @@ PeBigInt::operator long long unsigned() const
 	if (*this > PeBigInt(UINTMAX_MAX)) {
 		return UINTMAX_MAX;
 	} else {
-		long long unsigned sum = 0, base_mul = 1;
+		PeUint sum = 0, base_mul = 1;
 
 		for (const auto &ai : digits_) {
-			sum += base_mul * (long long unsigned)ai;
+			sum += base_mul * (PeUint)ai;
 
 			// This can overflow on the last loop but
 			// won't be used after that so don't worry
-			base_mul *= (long long unsigned)kBase;
+			base_mul *= (PeUint)kBase;
 		}
 
 		return sum;
@@ -545,7 +551,7 @@ PeBigInt &PeBigInt::absMultEq(const PeBigInt &rhs)
 	for (size_t i = 0; i < digits_.size(); ++i) {
 		// Inner loop over rhs digits with extra pass if carry occurs
 		for (int j = 0, carry = 0; (j < (int)rhs.digits_.size()) || carry; ++j) {
-			long long int cur = res[i + j] + digits_[i] *
+			PeInt cur = res[i + j] + digits_[i] *
 				(j < (int)rhs.digits_.size() ? rhs.digits_[j] : 0) + carry;
 
 			res[i + j] = (int)(cur % kBase);
@@ -635,7 +641,7 @@ PeBigInt &PeBigInt::absShortDivEq(int denominator)
 
 	// Loop over this number's digits in reverse order
 	for (auto ai = digits_.rbegin(); ai != digits_.rend(); ++ai) {
-		long long int cur = *ai + carry * kBase;
+		PeInt cur = *ai + carry * kBase;
 		*ai = (int)(cur / denominator);
 		carry = (int)(cur % denominator);
 	}
@@ -666,7 +672,7 @@ void PeBigInt::fromFloating(long double val)
 	digits_.push_back((unsigned)roundl(val));
 }
 
-void PeBigInt::fromSigned(long long int val)
+void PeBigInt::fromSigned(PeInt val)
 {
 	// Check for negative
 	if (val < 0) {
@@ -675,10 +681,10 @@ void PeBigInt::fromSigned(long long int val)
 	}
 
 	// Convert the unsigned value
-	fromUnsigned((long long unsigned)val);
+	fromUnsigned((PeUint)val);
 }
 
-void PeBigInt::fromUnsigned(long long unsigned val)
+void PeBigInt::fromUnsigned(PeUint val)
 {
 	while (val >= kBase) {
 		digits_.push_back(val % kBase);
@@ -699,16 +705,15 @@ void PeBigInt::fromUnsigned(long long unsigned val)
 //	"-10e10"
 //
 // Note that the exponent is not arbitrary precision!
-// The exponent is a long long unsigned and must be within
-// the that range for your compiler supports. If this is 64 bits, the
-// largest valid exponent in in the string is 18,446,744,073,709,551,615
-// i.e. a number that is over 18 quintillion decimal digits long...
-// Good luck allocating that much memory.
+// The exponent is a PeUint (long long unsigned) and must be within the range
+// that your compiler supports. If this is 64 bits, the largest valid exponent
+// in in the string is 18,446,744,073,709,551,615 i.e. a number that is over
+// 18 quintillion decimal digits long... Good luck allocating that much memory.
 //
 // Even if it's only 32 bits, that's still 4,294,967,295 digits.
-// Can you allocate a vector of 4 billion digits? Possibly. Will you get
-// any reasonable performance from this class for a number that large?
-// Unlikely. You probably need to look elsewhere for that kind of math.
+// Can you allocate a vector of 4 billion digits? Possibly. Will you get any
+// reasonable performance from this class for a number that large? Unlikely.
+// You probably need to look elsewhere for that kind of speedy math.
 void PeBigInt::fromString(const string &valstr)
 {
 	// Check that initialiser string matches
@@ -716,7 +721,7 @@ void PeBigInt::fromString(const string &valstr)
 
 	if (regex_match(valstr, value_match, kValueStringRe)) {
 		string strbase;
-		long long unsigned exp_value = 0;
+		PeUint exp_value = 0;
 
 		// Sign match
 		// Positive is the default so we only need to take action for a negative
@@ -807,7 +812,7 @@ void PeBigInt::shortDivision(int divisor, int &quotient)
 
 	// Loop over this number's digits in reverse order
 	for (auto ai = digits_.rbegin(); ai != digits_.rend(); ++ai) {
-		long long int cur = *ai + carry * kBase;
+		PeInt cur = *ai + carry * kBase;
 		*ai = (int)(cur / divisor);
 		carry = (int)(cur % divisor);
 	}

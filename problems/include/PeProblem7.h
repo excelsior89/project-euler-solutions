@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem7.h
+//
+// "10001st prime"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem7: public PeProblem
 {
 public:
-	PeProblem7();
-
+	PeProblem7() {}
 	virtual ~PeProblem7() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

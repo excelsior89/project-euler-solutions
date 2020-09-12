@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem2.cpp
+//
+// "Even Fibonacci numbers"
+
 #include "PeProblem2.h"
 
 using namespace std;
@@ -6,13 +12,13 @@ namespace pe {
 
 // The brute force solution: find the sum of even Fibonacci numbers
 // up to limit
-static int Method1(int limit)
+static PeUint Method1(PeUint limit)
 {
-	int cumulative_sum = 0;
+	PeUint cumulative_sum = 0;
 
-	int t0 = 0, t1 = 1; // Base case terms
+	PeUint t0 = 0, t1 = 1; // Base case terms
 
-	int tn = 1;
+	PeUint tn = 1;
 
 	// Continue until limit reached
 	while (tn <= limit) {
@@ -29,13 +35,13 @@ static int Method1(int limit)
 }
 
 // An improvement on Method1 which only calculates the even terms
-static int Method2(int limit)
+static PeUint Method2(PeUint limit)
 {
-	int cumulative_sum = 0;
+	PeUint cumulative_sum = 0;
 
-	int t0 = 0, t1 = 2; // Base case terms
+	PeUint t0 = 0, t1 = 2; // Base case terms
 
-	int tn = 2;
+	PeUint tn = 2;
 
 	// Continue until limit reached
 	while (tn <= limit) {
@@ -51,15 +57,11 @@ static int Method2(int limit)
 }
 
 // A "direct" solution which uses some tricksy maths...
-static int Method3(int limit)
+static PeUint Method3(PeUint limit)
 {
-	int n = (int)floor((log((double)limit) + log(5.0) / 2.0) / log(math::kPhi));
+	PeUint n = (PeUint)floor((log((double)limit) + log(5.0) / 2.0) / log(math::kPhi));
 
 	return (math::FibonacciDirect(n + 3) + math::FibonacciDirect(n) - 2) / 4;
-}
-
-PeProblem2::PeProblem2()
-{
 }
 
 
@@ -78,7 +80,7 @@ ostream &PeProblem2::DisplayProblem(ostream &os)
 
 ostream &PeProblem2::DisplaySolution(ostream &os)
 {
-	const int kLimit = 4000000;
+	const PeUint kLimit = 4000000;
 	os << formatting::SolutionHeader(kProblemNumber) << endl << endl <<
 		"Answer: " << Method3(kLimit) << endl << endl <<
 		formatting::MethodHeader(1) << endl << endl <<
@@ -138,7 +140,7 @@ ostream &PeProblem2::ProfileSolutions(int n_trials, ostream &os)
 {
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const int kLimit = 10000000;
+	const PeUint kLimit = 10000000;
 
 	clock_t start_time(clock());
 	for (int i = 0; i < n_trials; ++i) {

@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem1.h
+//
+// "Multiples of 3 and 5"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem1: public PeProblem
 {
 public:
-	PeProblem1();
-
+	PeProblem1() {}
 	virtual ~PeProblem1() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

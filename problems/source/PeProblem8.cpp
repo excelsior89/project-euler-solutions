@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem8.cpp
+//
+// "Largest product in a series"
+
 #include "PeProblem8.h"
 
 using namespace std;
@@ -8,10 +14,10 @@ namespace pe {
 // Test every window over the whole sequence.
 // Throws an exception if window_size is greater than the sequence length.
 // Treats a window_size of 0 as the same as a window_size of 1.
-static uint64_t Method1(const vector<uint64_t> &digit_sequence, size_t window_size)
+static PeUint Method1(const vector<PeUint> &digit_sequence, size_t window_size)
 {
 	// Max product cannot be less than 0 so we're using unsigned types
-	uint64_t max_product = 0;
+	PeUint max_product = 0;
 
 	// Error if the window size is too big
 	if (window_size > digit_sequence.size()) {
@@ -34,7 +40,7 @@ static uint64_t Method1(const vector<uint64_t> &digit_sequence, size_t window_si
 	for (; it2 != digit_sequence.end(); ++it1, ++it2, ++i1, ++i2) {
 
 		// Product of window - remember to accumulate to it2 + 1 (to include it2 itself)
-		uint64_t digit_product = accumulate(it1, it2 + 1, (uint64_t)1, multiplies<uint64_t>());
+		PeUint digit_product = accumulate(it1, it2 + 1, (PeUint)1, multiplies<PeUint>());
 
 		// Keep the product if it's the largest so far
 		if (digit_product > max_product) {
@@ -51,10 +57,10 @@ static uint64_t Method1(const vector<uint64_t> &digit_sequence, size_t window_si
 // as it doesn't check for any new zeros _within_ the sequence.
 // Throws an exception if window_size is greater than the sequence length.
 // Treats a window_size of 0 as the same as a window_size of 1.
-static uint64_t Method2(const vector<uint64_t> &digit_sequence, size_t window_size)
+static PeUint Method2(const vector<PeUint> &digit_sequence, size_t window_size)
 {
 	// Max product cannot be less than 0 so we're using unsigned types
-	uint64_t max_product = 0;
+	PeUint max_product = 0;
 
 	// Error if the window size is too big
 	if (window_size > digit_sequence.size()) {
@@ -75,7 +81,7 @@ static uint64_t Method2(const vector<uint64_t> &digit_sequence, size_t window_si
 		// Check for an incoming zero
 		if (*it2 != 0) {
 			// Product of window - remember to accumulate to it2 + 1 (to include it2 itself)
-			uint64_t digit_product = accumulate(it1, it2 + 1, (uint64_t)1, multiplies<uint64_t>());
+			PeUint digit_product = accumulate(it1, it2 + 1, (PeUint)1, multiplies<PeUint>());
 
 			// Keep the product if it's the largest so far
 			if (digit_product > max_product) {
@@ -108,10 +114,10 @@ static uint64_t Method2(const vector<uint64_t> &digit_sequence, size_t window_si
 // digits.
 // As before, throws an exception if window_size is greater than the sequence length.
 // Treats a window_size of 0 as the same as a window_size of 1.
-static uint64_t Method3(const vector<uint64_t> &digit_sequence, size_t window_size)
+static PeUint Method3(const vector<PeUint> &digit_sequence, size_t window_size)
 {
 	// Max product cannot be less than 0 so we're using unsigned types
-	uint64_t max_product = 0;
+	PeUint max_product = 0;
 
 	// Error if the window size is too big
 	if (window_size > digit_sequence.size()) {
@@ -124,16 +130,17 @@ static uint64_t Method3(const vector<uint64_t> &digit_sequence, size_t window_si
 	}
 
 
-	///////
+	// Now process the sequence to find the zero indices
+
 	int previous_zero_index = -1;
 
 	for (size_t i = 0; i < digit_sequence.size(); ++i) {
 		if (digit_sequence[i] == 0) {
 			// Find length of zero-free zpan
-			size_t span_length = i - (unsigned)(previous_zero_index + 1);
+			size_t span_length = i - static_cast<PeUint>(previous_zero_index + 1);
 
 			// If span is at least window_size long, find the product(s)
-			if (span_length >= (unsigned)window_size) {
+			if (span_length >= static_cast<PeUint>(window_size)) {
 
 				// Window checking between the current zero
 				// and the previous zero.
@@ -144,8 +151,9 @@ static uint64_t Method3(const vector<uint64_t> &digit_sequence, size_t window_si
 					// Product of the window
 					// Product of window - remember to accumulate to end_ind + 1
 					// (to include end_ind itself)
-					uint64_t digit_product = accumulate(digit_sequence.begin() + start_ind,
-						digit_sequence.begin() + end_ind + 1, (uint64_t)1, multiplies<uint64_t>());
+					PeUint digit_product = accumulate(digit_sequence.begin() + start_ind,
+						digit_sequence.begin() + end_ind + 1,
+						PeUint(1), multiplies<PeUint>());
 
 					// Keep the product if it's the largest so far
 					if (digit_product > max_product) {
@@ -154,16 +162,11 @@ static uint64_t Method3(const vector<uint64_t> &digit_sequence, size_t window_si
 				}
 			}
 
-			previous_zero_index = (int)i;
+			previous_zero_index = static_cast<int>(i);
 		}
 	}
 
 	return max_product;
-}
-
-
-PeProblem8::PeProblem8()
-{
 }
 
 
@@ -214,8 +217,8 @@ ostream &PeProblem8::DisplaySolution(ostream &os)
 	// in bit depth (although not exactly: 512/log2(9) ~= 161.518, so you could
 	// get away with a window size of 161, rather than 160...)
 
-	const unsigned kWindowSize = 13;
-	const vector<uint64_t> kNumber({
+	const PeUint kWindowSize = 13;
+	const vector<PeUint> kNumber({
 		7,3,1,6,7,1,7,6,5,3,1,3,3,0,6,2,4,9,1,9,2,2,5,1,1,9,6,7,4,4,2,6,5,7,4,7,
 		4,2,3,5,5,3,4,9,1,9,4,9,3,4,9,6,9,8,3,5,2,0,3,1,2,7,7,4,5,0,6,3,2,6,2,3,
 		9,5,7,8,3,1,8,0,1,6,9,8,4,8,0,1,8,6,9,4,7,8,8,5,1,8,4,3,8,5,8,6,1,5,6,0,
@@ -280,8 +283,8 @@ ostream &PeProblem8::ProfileSolutions(int n_trials, ostream &os)
 {
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const unsigned kWindowSize = 13;
-	const vector<uint64_t> kNumber({
+	const PeUint kWindowSize = 13;
+	const vector<PeUint> kNumber({
 		7,3,1,6,7,1,7,6,5,3,1,3,3,0,6,2,4,9,1,9,2,2,5,1,1,9,6,7,4,4,2,6,5,7,4,7,
 		4,2,3,5,5,3,4,9,1,9,4,9,3,4,9,6,9,8,3,5,2,0,3,1,2,7,7,4,5,0,6,3,2,6,2,3,
 		9,5,7,8,3,1,8,0,1,6,9,8,4,8,0,1,8,6,9,4,7,8,8,5,1,8,4,3,8,5,8,6,1,5,6,0,

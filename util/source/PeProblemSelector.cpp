@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblemSelector.cpp
+//
+// Problem selector helper class
+
 #include "PeProblemSelector.h"
 
 #include "PeProblem1.h"
@@ -14,6 +20,7 @@
 #include "PeProblem12.h"
 #include "PeProblem13.h"
 #include "PeProblem14.h"
+#include "PeProblem15.h"
 
 using namespace std;
 
@@ -34,6 +41,7 @@ PeProblemSelector::PeProblemSelector()
 	problems_.push_back(make_unique<PeProblem12>());
 	problems_.push_back(make_unique<PeProblem13>());
 	problems_.push_back(make_unique<PeProblem14>());
+	problems_.push_back(make_unique<PeProblem15>());
 }
 
 

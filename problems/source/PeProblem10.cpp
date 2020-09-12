@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem10.cpp
+//
+// "Summation of primes"
+
 #include "PeProblem10.h"
 
 using namespace std;
@@ -7,15 +13,15 @@ namespace pe {
 // Use the Sieve of Eratosthenes to generate primes until the summation limit
 // is met. We're using 64 bit integers since the problem statement could start
 // pushing us towards quite large values.
-static uint64_t Method1(uint64_t limit)
+static PeUint Method1(PeUint limit)
 {
-	uint64_t sum = 0;
+	PeUint sum = 0;
 
 	// Get the array of primes
-	auto primes_vec = math::GeneratePrimesEratosthenes((unsigned)limit);
+	auto primes_vec = math::GeneratePrimesEratosthenes(limit);
 
 	// STL accumulate to calulcate the sum
-	sum = accumulate(primes_vec.begin(), primes_vec.end(), (uint64_t)0);
+	sum = accumulate(primes_vec.begin(), primes_vec.end(), PeUint(0));
 	
 	return sum;
 }
@@ -26,7 +32,7 @@ static uint64_t Method1(uint64_t limit)
 // the sum instead of an array of primes, which avoids using the space for
 // the array and uses only the loops for the sieve algorithm, saving an
 // extra summation loop.
-static uint64_t Method2(unsigned limit)
+static PeUint Method2(PeUint limit)
 {
 	if (limit < 2) {
 		return 0;
@@ -34,17 +40,17 @@ static uint64_t Method2(unsigned limit)
 		return 2;
 	} else {
 		// 2, being the only even prime, gets specially included first
-		uint64_t primes_sum = 2;
+		PeUint primes_sum = 2;
 
 		// Set up an array of flags
 		vector<bool> base_candidates(limit / 2, true);
 
-		unsigned k = limit / 3; // Integer division
+		PeUint k = limit / 3; // Integer division
 
 		// Sieve of Sundaram
 		// Mark off odd integers of the form i + j + 2ij
-		for (unsigned j = 1; j < k; ++j) {
-			for (unsigned i = 1; i <= j; ++i) {
+		for (PeUint j = 1; j < k; ++j) {
+			for (PeUint i = 1; i <= j; ++i) {
 				if (i + j + 2 * i * j >= base_candidates.size()) {
 					break;
 				}
@@ -54,19 +60,14 @@ static uint64_t Method2(unsigned limit)
 
 		// Collect the sum for all remaining "true" candidates, which
 		// must be prime
-		for (unsigned i = 1; i < base_candidates.size(); ++i) {
+		for (PeUint i = 1; i < base_candidates.size(); ++i) {
 			if (base_candidates[i]) {
-				primes_sum += (uint64_t)(2 * i + 1);
+				primes_sum += (PeUint)(2 * i + 1);
 			}
 		}
 
 		return primes_sum;
 	}
-}
-
-
-PeProblem10::PeProblem10()
-{
 }
 
 
@@ -82,7 +83,7 @@ ostream &PeProblem10::DisplayProblem(ostream &os)
 
 ostream &PeProblem10::DisplaySolution(ostream &os)
 {
-	const uint64_t kTargetSum = 2000000;
+	const PeUint kTargetSum = 2000000;
 
 	auto sum1 = Method1(kTargetSum);
 	auto sum2 = Method2(kTargetSum);
@@ -109,8 +110,8 @@ ostream &PeProblem10::ProfileSolutions(int n_trials, ostream &os)
 {
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const uint64_t kTargetSum = 1000000;
-	uint64_t sum1 = 0, sum2 = 0;
+	const PeUint kTargetSum = 1000000;
+	PeUint sum1 = 0, sum2 = 0;
 
 	clock_t start_time(clock());
 	for (int i = 0; i < n_trials; ++i) {

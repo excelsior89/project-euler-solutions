@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeBigInt.h
+//
+// A custom arbitrary precision signed integer arithmetic class
+
 #pragma once
 
 #include <algorithm>
@@ -7,6 +13,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "PeDefinitions.h"
 
 namespace pe {
 	
@@ -25,10 +33,10 @@ public:
 	// Constructors from integer types
 	PeBigInt(int val);
 	PeBigInt(long int val);
-	PeBigInt(long long int val);
+	PeBigInt(PeInt val);
 	PeBigInt(unsigned val);
 	PeBigInt(long unsigned val);
-	PeBigInt(long long unsigned val);
+	PeBigInt(PeUint val);
 	
 	// Constructors from floating point types
 	PeBigInt(float val);
@@ -111,8 +119,8 @@ public:
 	// with numbers beyond typical shorter data types...
 	
 	// Conversion to integer types
-	operator long long int() const;
-	operator long long unsigned() const;
+	operator PeInt() const;
+	operator PeUint() const;
 	
 	// Conversion to floating point types
 	operator long double() const;
@@ -130,8 +138,8 @@ public:
 	// Private helper functions
 private:
 	// Initialiser functions
-	void fromSigned(long long int val);
-	void fromUnsigned(long long unsigned val);
+	void fromSigned(PeInt val);
+	void fromUnsigned(PeUint val);
 	void fromFloating(long double val);
 	void fromString(const std::string &valstr);
 

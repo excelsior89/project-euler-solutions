@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem14.h
+//
+// "Longest Collatz sequence"
+
 #pragma once
 
 #include "PeProblem.h"
@@ -7,8 +13,7 @@ namespace pe {
 class PeProblem14: public PeProblem
 {
 public:
-	PeProblem14();
-
+	PeProblem14() {}
 	virtual ~PeProblem14() {}
 
 	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;

@@ -1,3 +1,9 @@
+// Copyright 2020 Paul Robertson
+//
+// PeProblem.h
+//
+// Base class for Project Euler problem/solution display
+
 #pragma once
 
 #include <ctime>
@@ -7,7 +13,7 @@ namespace pe {
 class PeProblem
 {
 public:
-	PeProblem();
+	PeProblem() {}
 
 	virtual ~PeProblem() {}
 
