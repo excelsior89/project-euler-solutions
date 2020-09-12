@@ -10,7 +10,6 @@
 #include "PeProblemSelector.h"
 
 using namespace std;
-
 using namespace pe;
 
 int main(int argc, char *argv[])
