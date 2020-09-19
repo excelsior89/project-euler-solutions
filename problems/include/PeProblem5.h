@@ -9,7 +9,6 @@
 #include <map>
 
 #include "PeProblem.h"
-#include "PeUtilities.h"
 
 namespace pe {
 class PeProblem5: public PeProblem

@@ -12,11 +12,11 @@ namespace pe {
 
 // Iteratively find the lowest common multiple
 // from 1 to n
-static int Method1(int n)
+static PeUint Method1(PeUint n)
 {
-	int current_lcm = 1;
+	PeUint current_lcm = 1;
 
-	for (int i = 1; i < n; ++i) {
+	for (PeUint i = 1; i < n; ++i) {
 		current_lcm = math::Lcm(current_lcm, i);
 	}
 		
@@ -27,7 +27,7 @@ static int Method1(int n)
 // Find the prime factors of each number
 // from 1 to n and select the highest index of each,
 // then compute the product
-static int Method2(int n)
+static PeUint Method2(PeUint n)
 {
 	// Quick return
 	if (n == 1) {
@@ -36,10 +36,10 @@ static int Method2(int n)
 
 	// Store the indices in a map
 	// We know that 2, at least, will be a factor here
-	map<int, int> factor_indices({{2, 1}});
+	map<PeUint, PeUint> factor_indices({{2, 1}});
 
 	// Iterate over each number from 2 to n
-	for (int i = 2; i <= n; ++i) {
+	for (PeUint i = 2; i <= n; ++i) {
 		auto factors = math::PrimeFactors(i);
 
 		// If i is prime, we know it won't have occured yet in the factor
@@ -51,8 +51,7 @@ static int Method2(int n)
 
 		// Otherwise, we need to do a bit more...
 
-		int ind = 1;
-		int current_factor = factors.front();
+		PeUint ind = 1, current_factor = factors.front();
 		
 		// Tally factors into index form and update the map of factor indices
 		for (auto i_this_fact = factors.begin() + 1;
@@ -93,11 +92,11 @@ static int Method2(int n)
 
 
 	// Find the product of the max index factors
-	int lcm_product = 1;
+	PeUint lcm_product = 1;
 
 	for (const auto &fact : factor_indices) {
 		// Could use pow() here but this may be slightly faster
-		for (int i = 0; i < fact.second; ++i) {
+		for (PeUint i = 0; i < fact.second; ++i) {
 			lcm_product *= fact.first;
 		}
 	}
@@ -115,9 +114,9 @@ static int Method2(int n)
 //   5^1 = 5 (5^2 = 25 > 10)
 //   7^1 = 7 (7^2 = 49 > 10)
 // Hence the LCM of digits 1...10 is 8*9*5*7 = 2520
-static int Method3(int n)
+static PeUint Method3(PeUint n)
 {
-	int lcm_value = 1;
+	PeUint lcm_value = 1;
 
 	// Find primes less than n
 	auto primes_to_n = math::GeneratePrimesSundaram(n);
@@ -125,7 +124,7 @@ static int Method3(int n)
 	// Find the maximum power of each prime such that p^k <= n,
 	// where p is the prime number
 	for (auto i = primes_to_n.begin(); i != primes_to_n.end(); ++i) {
-		int i_trial = *i;
+		auto i_trial = *i;
 
 		while (i_trial < n) {
 			i_trial *= *i;
@@ -153,7 +152,7 @@ ostream &PeProblem5::DisplayProblem(ostream &os)
 
 ostream &PeProblem5::DisplaySolution(ostream &os)
 {
-	const int kN = 20;
+	const PeUint kN = 20;
 	os << formatting::SolutionHeader(kProblemNumber) << endl << endl <<
 		"Answer: " << Method1(kN) << endl << endl <<
 		formatting::MethodHeader(1) << endl << endl <<
@@ -183,41 +182,23 @@ ostream &PeProblem5::DisplaySolution(ostream &os)
 	return os;
 }
 
+#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint>
+
 ostream &PeProblem5::ProfileSolutions(int n_trials, ostream &os)
 {
+	const PeUint kN = 20;
+
+	// Display header
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const int kN = 20;
-
-	clock_t start_time(clock());
-	for (int i = 0; i < n_trials; ++i) {
-		Method1(kN);
-	}
-	clock_t method_1_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		Method2(kN);
-	}
-	clock_t method_2_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		Method3(kN);
-	}
-	clock_t method_3_time = clock() - start_time;
-
-	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_1_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_2_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_3_time / (long double)n_trials << endl << endl;
+	// Profile each method
+	ProfilingFunc(1, n_trials, os, Method1, kN);
+	ProfilingFunc(2, n_trials, os, Method2, kN);
+	ProfilingFunc(3, n_trials, os, Method3, kN);
 
 	return os;
 }
+
+#undef ProfilingFunc
 
 }; // namespace pe

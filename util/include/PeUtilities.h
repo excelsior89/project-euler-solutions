@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <ctime>
 #include <iostream>
 #include <numeric>
 #include <string>
@@ -157,7 +158,40 @@ PeUint SumOfCubesOneToN(PeUint n);
 };
 
 namespace profiling {
-const int kNumberOfTrials = 1000;
+
+// Do a simple "time trial" of a function by running it for a fixed number of
+// trials with the same inputs to give a crude assessment of its relative
+// performance. Display the average time (using ctime's clock()) per trial on
+// the console.
+// This uses variadic templating to achieve more general use. An example call:
+//
+//		TimeProfileFunction<PeUint, PeUint>(100, 1, std::cout, Method1, 20);
+//
+// This wold call "Method1(20)" 100 times and write the resulting time,
+// with a formatted header indicating this is method 1, to the stream std::cout.
+template<typename ReturnType, typename ...InputTypes>
+void TimeProfileFunction(int method_number,
+							int number_of_trials,
+							std::ostream &os,
+							ReturnType (profile_func)(InputTypes...),
+							InputTypes ...inputs)
+{
+	// Function timing itself
+	clock_t start_time(clock());
+
+	for (int i = 0; i < number_of_trials; ++i) {
+		profile_func(inputs...);
+	}
+
+	clock_t time_taken = clock() - start_time;
+
+	// Formatted output display
+	os << formatting::MethodHeader(method_number) << endl << endl <<
+		"Time average over " << number_of_trials << " trials: " <<
+		static_cast<long double>(time_taken) / static_cast<long double>(number_of_trials) << 
+		endl << endl;
+}
+
 }; // namespace profiling
 
 }; // namespace pe

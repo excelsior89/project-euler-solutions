@@ -41,8 +41,10 @@ const PeUint kSetSize = 4;
 // Brute force solution
 // Test all possible adjacent sets of digits vertically, horizontally and diagonally
 // and record the maximum
-static PeUint Method1(const PeUint number_grid[], const PeUint height,
-	const PeUint width, const PeUint set_size)
+static PeUint Method1(const PeUint number_grid[],
+					  const PeUint height,
+					  const PeUint width,
+					  const PeUint set_size)
 {
 	PeUint max_product = 0, ibase = 0;
 	// 4 temporary values for the row, column and two diagonal values to check
@@ -128,8 +130,10 @@ static PeUint Method1(const PeUint number_grid[], const PeUint height,
 // Still a rather brute force method, but just to be different, in this method
 // we search the row, column and diagonal spaces separately and attempt to skip
 // over any zeroes found
-static PeUint Method2(const PeUint number_grid[], const PeUint height,
-	const PeUint width, const PeUint set_size)
+static PeUint Method2(const PeUint number_grid[],
+					  const PeUint height,
+					  const PeUint width,
+					  const PeUint set_size)
 {
 	PeUint max_product = 0, tmp_product1 = 1, tmp_product2 = 1;
 
@@ -289,33 +293,20 @@ ostream &PeProblem11::DisplaySolution(ostream &os)
 	return os;
 }
 
+#define ProfilingFunc profiling::TimeProfileFunction<PeUint, const PeUint *, PeUint, PeUint, PeUint>
+
 ostream &PeProblem11::ProfileSolutions(int n_trials, ostream &os)
 {
+	// Display header
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const PeUint kGrid = 1000000;
-	PeUint max_prod1 = 0, max_prod2 = 0;
-
-	clock_t start_time(clock());
-	for (int i = 0; i < n_trials; ++i) {
-		max_prod1 = Method1(kNumberGrid, kGridHeight, kGridWidth, kSetSize);
-	}
-	clock_t method_1_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		max_prod2 = Method2(kNumberGrid, kGridHeight, kGridWidth, kSetSize);
-	}
-	clock_t method_2_time = clock() - start_time;
-
-	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_1_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_2_time / (long double)n_trials << endl << endl;
+	// Profile each method
+	ProfilingFunc(1, n_trials, os, Method1, kNumberGrid, kGridHeight, kGridWidth, kSetSize);
+	ProfilingFunc(2, n_trials, os, Method2, kNumberGrid, kGridHeight, kGridWidth, kSetSize);
 
 	return os;
 }
+
+#undef ProfilingFunc
 
 }; // namespace pe

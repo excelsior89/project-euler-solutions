@@ -7,7 +7,6 @@
 #pragma once
 
 #include "PeProblem.h"
-#include "PeUtilities.h"
 
 namespace pe {
 class PeProblem3: public PeProblem

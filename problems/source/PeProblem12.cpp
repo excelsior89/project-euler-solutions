@@ -245,45 +245,27 @@ ostream &PeProblem12::DisplaySolution(ostream &os)
 	return os;
 }
 
+#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint>
+
 ostream &PeProblem12::ProfileSolutions(int n_trials, ostream &os)
 {
+	// Display header
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
-
+	
 	// 2000 gives T_n near 2*10^9, so much higher will probably lead to overflow
-	const int kTargetDivisorCount = 300;
+	const PeUint kTargetDivisorCount = 300;
 	PeUint target_triangle_number1 = 0,
 		target_triangle_number2 = 0,
 		target_triangle_number3 = 0;
 
-	clock_t start_time(clock());
-	for (int i = 0; i < n_trials; ++i) {
-		target_triangle_number1 = Method1(kTargetDivisorCount);
-	}
-	clock_t method_1_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		target_triangle_number2 = Method2(kTargetDivisorCount);
-	}
-	clock_t method_2_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		target_triangle_number3 = Method3(kTargetDivisorCount);
-	}
-	clock_t method_3_time = clock() - start_time;
-
-	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_1_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_2_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_3_time / (long double)n_trials << endl << endl;
+	// Profile each method
+	ProfilingFunc(1, n_trials, os, Method1, kTargetDivisorCount);
+	ProfilingFunc(2, n_trials, os, Method2, kTargetDivisorCount);
+	ProfilingFunc(3, n_trials, os, Method3, kTargetDivisorCount);
 
 	return os;
 }
+
+#undef ProfilingFunc
 
 }; // namespace pe

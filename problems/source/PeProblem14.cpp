@@ -821,48 +821,32 @@ ostream &PeProblem14::DisplaySolution(ostream &os)
 	return os;
 }
 
+#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint, vector<PeUint> &>
+
 ostream &PeProblem14::ProfileSolutions(int n_trials, ostream &os)
 {
-	const PeUint kStartingNumberLimit = 1000000;
+	// Display header
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	PeUint max_start_1 = 0,
-		max_start_2 = 0, max_start_3 = 0;
-
-	// The highest pre-precomputed number of steps to highlight
-	// the biggest advantage of Method 3 over Method 2
-	const unsigned method_3_k_steps = 10;
+	const PeUint kStartingNumberLimit = 1000000;
 	vector<PeUint> sequence_1, sequence_2, sequence_3;
 
-	clock_t start_time(clock());
-	for (int i = 0; i < n_trials; ++i) {
-		max_start_1 = Method1(kStartingNumberLimit, sequence_1);
-	}
-	clock_t method_1_time = clock() - start_time;
+	// The highest pre-precomputed number of steps to highlight the biggest
+	// advantage of Method 3 over Method 2
+	const PeUint kMethod3StepsPerIteration = 10;
 
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		max_start_2 = Method2(kStartingNumberLimit, sequence_2);
-	}
-	clock_t method_2_time = clock() - start_time;
 
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		max_start_3 = Method3(kStartingNumberLimit, sequence_3, 5);
-	}
-	clock_t method_3_time = clock() - start_time;
+	// Profile each method
+	ProfilingFunc(1, n_trials, os, Method1, kStartingNumberLimit, sequence_1);
+	ProfilingFunc(2, n_trials, os, Method2, kStartingNumberLimit, sequence_2);
 
-	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_1_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_2_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_3_time / (long double)n_trials << endl << endl;
+	profiling::TimeProfileFunction<PeUint, PeUint, vector<PeUint> &, PeUint>(3,
+		n_trials, os, Method3, kStartingNumberLimit, sequence_3,
+		kMethod3StepsPerIteration);
 
 	return os;
 }
+
+#undef ProfilingFunc
 
 }; // namespace pe

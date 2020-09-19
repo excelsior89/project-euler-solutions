@@ -10,7 +10,6 @@ using namespace std;
 
 namespace pe {
 
-
 // Simple search
 // Return product abc if a triple (a,b,c) that makes the sum is found, otherwise return 0.
 // Store the triple, if found, in <triple>.
@@ -191,34 +190,23 @@ ostream &PeProblem9::DisplaySolution(ostream &os)
 	return os;
 }
 
+#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint, tuple<PeUint, PeUint, PeUint> &>
+
 ostream &PeProblem9::ProfileSolutions(int n_trials, ostream &os)
 {
+	// Display header
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
 	const PeUint kTargetSum = 1000;
 	tuple<PeUint, PeUint, PeUint> triple1(0,0,0), triple2(0,0,0);
-	PeUint prod1 = 0, prod2 = 0;
 
-	clock_t start_time(clock());
-	for (int i = 0; i < n_trials; ++i) {
-		prod1 = Method1(kTargetSum, triple1);
-	}
-	clock_t method_1_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		prod2 = Method2(kTargetSum, triple2);
-	}
-	clock_t method_2_time = clock() - start_time;
-
-	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_1_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_2_time / (long double)n_trials << endl << endl;
+	// Profile each method
+	ProfilingFunc(1, n_trials, os, Method1, kTargetSum, triple1);
+	ProfilingFunc(2, n_trials, os, Method2, kTargetSum, triple2);
 
 	return os;
 }
+
+#undef ProfilingFunc
 
 }; // namespace pe

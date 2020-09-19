@@ -383,43 +383,21 @@ ostream &PeProblem13::DisplaySolution(ostream &os)
 	return os;
 }
 
+#define ProfilingFunc profiling::TimeProfileFunction<PeUint, const array<string, MNUMBERS> &>
+
 ostream &PeProblem13::ProfileSolutions(int n_trials, ostream &os)
 {
+	// Display header
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	PeUint first_ten1 = 0,
-		first_ten2 = 0,
-		first_ten3 = 0;
-
-	clock_t start_time(clock());
-	for (int i = 0; i < n_trials; ++i) {
-		first_ten1 = Method1(kLargeNumbers);
-	}
-	clock_t method_1_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		first_ten2 = Method2(kLargeNumbers);
-	}
-	clock_t method_2_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		first_ten3 = Method3(kLargeNumbers);
-	}
-	clock_t method_3_time = clock() - start_time;
-
-	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_1_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_2_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(3) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_3_time / (long double)n_trials << endl << endl;
+	// Profile each method
+	ProfilingFunc(1, n_trials, os, Method1, kLargeNumbers);
+	ProfilingFunc(2, n_trials, os, Method2, kLargeNumbers);
+	ProfilingFunc(3, n_trials, os, Method3, kLargeNumbers);
 
 	return os;
 }
+
+#undef ProfilingFunc
 
 }; // namespace pe

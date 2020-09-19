@@ -90,34 +90,22 @@ ostream &PeProblem1::DisplaySolution(ostream &os)
 	return os;
 }
 
+#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint, PeUint, PeUint>
+
 ostream &PeProblem1::ProfileSolutions(int n_trials, ostream &os)
 {
+	// Display header
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	clock_t start_time(clock());
+	const PeUint kLimit = 1000, a = 3, b = 5;
 
-	for (int i = 0; i < n_trials; ++i) {
-		Method1(1000, 3, 5);
-	}
-
-	clock_t method_1_time = clock() - start_time;
-
-	start_time = clock();
-
-	for (int i = 0; i < n_trials; ++i) {
-		Method2(1000, 3, 5);
-	}
-
-	clock_t method_2_time = clock() - start_time;
-
-	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_1_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_2_time / (long double)n_trials << endl << endl;
+	// Profile each method
+	ProfilingFunc(1, n_trials, os, Method1, kLimit, a, b);
+	ProfilingFunc(2, n_trials, os, Method2, kLimit, a, b);
 
 	return os;
 }
+
+#undef ProfilingFunc
 
 }; // namespace pe

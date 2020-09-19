@@ -13,20 +13,20 @@ namespace pe {
 // Brute force method
 // Work out the squared sum and sum of squares iteratively
 // then return the difference
-static int Method1(int n)
+static PeUint Method1(PeUint n)
 {
 	// Collect sums in these variables
-	int sum_of_int = 0, sum_of_squares = 0;
+	PeUint sum_of_int = 0, sum_of_squares = 0;
 
 	// Iteratve from 1 to n, adding i and i^2
 	// to the two sums
-	for (int i = 1; i <= n; ++i) {
+	for (PeUint i = 1; i <= n; ++i) {
 		sum_of_int += i;
 		sum_of_squares += i*i;
 	}
 
 	// Difference of the square of sum and sum of squares
-	return sum_of_int*sum_of_int - sum_of_squares;
+	return sum_of_int * sum_of_int - sum_of_squares;
 }
 
 // This method uses and analytic formula derived from the
@@ -34,7 +34,7 @@ static int Method1(int n)
 //  (sum(1..n))^2 - sum(1^2...n^2)
 //  = (n^4+2*n^3+n^2)/4 - (2*n^3+3*n^2+n)/6
 //  = (3*n^4+2*n^3-3*n^2-2*n)/12
-static int Method2(int n)
+static PeUint Method2(PeUint n)
 {
 	// Horner form of the above polynomial
 	return n * (-2 + n * (-3 + n * (2 + 3 * n))) / 12;
@@ -59,7 +59,7 @@ ostream &PeProblem6::DisplayProblem(ostream &os)
 
 ostream &PeProblem6::DisplaySolution(ostream &os)
 {
-	const int kN = 100;
+	const PeUint kN = 100;
 	os << formatting::SolutionHeader(kProblemNumber) << endl << endl <<
 		"Answer: " << Method2(kN) << endl << endl <<
 		formatting::MethodHeader(1) << endl << endl <<
@@ -88,32 +88,22 @@ ostream &PeProblem6::DisplaySolution(ostream &os)
 	return os;
 }
 
+#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint>
+
 ostream &PeProblem6::ProfileSolutions(int n_trials, ostream &os)
 {
+	// Display header
 	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
 
-	const int kN = 100;
+	const PeUint kN = 100;
 
-	clock_t start_time(clock());
-	for (int i = 0; i < n_trials; ++i) {
-		Method1(kN);
-	}
-	clock_t method_1_time = clock() - start_time;
-
-	start_time = clock();
-	for (int i = 0; i < n_trials; ++i) {
-		Method2(kN);
-	}
-	clock_t method_2_time = clock() - start_time;
-
-	os << formatting::MethodHeader(1) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_1_time / (long double)n_trials << endl << endl <<
-		formatting::MethodHeader(2) << endl << endl <<
-		"Time average over " << n_trials << " trials: " <<
-		(long double)method_2_time / (long double)n_trials << endl << endl;
+	// Profile each method
+	ProfilingFunc(1, n_trials, os, Method1, kN);
+	ProfilingFunc(2, n_trials, os, Method2, kN);
 
 	return os;
 }
+
+#undef ProfilingFunc
 
 }; // namespace pe
