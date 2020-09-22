@@ -190,23 +190,16 @@ ostream &PeProblem9::DisplaySolution(ostream &os)
 	return os;
 }
 
-#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint, tuple<PeUint, PeUint, PeUint> &>
+// Solution profiling
 
-ostream &PeProblem9::ProfileSolutions(int n_trials, ostream &os)
-{
-	// Display header
-	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
+#define PROFILE_RETURN_TYPE_ PeUint
+#define PROFILE_INPUT_TYPES_ PeUint, tuple<PeUint, PeUint, PeUint> &
+#define PROFILE_ARGS_ 1000, tuple<PeUint, PeUint, PeUint>(0, 0, 0)
 
-	const PeUint kTargetSum = 1000;
-	tuple<PeUint, PeUint, PeUint> triple1(0,0,0), triple2(0,0,0);
+PROFILE_SOLUTIONS(PeProblem9, Method1, Method2)
 
-	// Profile each method
-	ProfilingFunc(1, n_trials, os, Method1, kTargetSum, triple1);
-	ProfilingFunc(2, n_trials, os, Method2, kTargetSum, triple2);
-
-	return os;
-}
-
-#undef ProfilingFunc
+#undef PROFILE_RETURN_TYPE_
+#undef PROFILE_INPUT_TYPES_
+#undef PROFILE_ARGS_
 
 }; // namespace pe

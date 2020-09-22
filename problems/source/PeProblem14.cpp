@@ -821,6 +821,11 @@ ostream &PeProblem14::DisplaySolution(ostream &os)
 	return os;
 }
 
+// Solution profiling
+
+// The predefined macros aren't applicable here since method 3 uses an extra parameter,
+// so this function is being written out more completely
+
 #define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint, vector<PeUint> &>
 
 ostream &PeProblem14::ProfileSolutions(int n_trials, ostream &os)
@@ -840,6 +845,7 @@ ostream &PeProblem14::ProfileSolutions(int n_trials, ostream &os)
 	ProfilingFunc(1, n_trials, os, Method1, kStartingNumberLimit, sequence_1);
 	ProfilingFunc(2, n_trials, os, Method2, kStartingNumberLimit, sequence_2);
 
+	// This method has an extra parameter so we can't use the predefined macros
 	profiling::TimeProfileFunction<PeUint, PeUint, vector<PeUint> &, PeUint>(3,
 		n_trials, os, Method3, kStartingNumberLimit, sequence_3,
 		kMethod3StepsPerIteration);

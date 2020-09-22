@@ -245,27 +245,16 @@ ostream &PeProblem12::DisplaySolution(ostream &os)
 	return os;
 }
 
-#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint>
+// Solution profiling
 
-ostream &PeProblem12::ProfileSolutions(int n_trials, ostream &os)
-{
-	// Display header
-	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
-	
-	// 2000 gives T_n near 2*10^9, so much higher will probably lead to overflow
-	const PeUint kTargetDivisorCount = 300;
-	PeUint target_triangle_number1 = 0,
-		target_triangle_number2 = 0,
-		target_triangle_number3 = 0;
+#define PROFILE_RETURN_TYPE_ PeUint
+#define PROFILE_INPUT_TYPES_ PeUint
+#define PROFILE_ARGS_ 300
 
-	// Profile each method
-	ProfilingFunc(1, n_trials, os, Method1, kTargetDivisorCount);
-	ProfilingFunc(2, n_trials, os, Method2, kTargetDivisorCount);
-	ProfilingFunc(3, n_trials, os, Method3, kTargetDivisorCount);
+PROFILE_SOLUTIONS(PeProblem12, Method1, Method2, Method3)
 
-	return os;
-}
-
-#undef ProfilingFunc
+#undef PROFILE_RETURN_TYPE_
+#undef PROFILE_INPUT_TYPES_
+#undef PROFILE_ARGS_
 
 }; // namespace pe

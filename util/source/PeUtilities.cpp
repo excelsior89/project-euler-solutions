@@ -131,6 +131,34 @@ vector<PeUint> CollatzSequence(const PeUint starting_value)
 	return sequence;
 }
 
+// Calculate the digit sum of the of <num>: first, add the digits of <num>.
+// If this sum is greater than 10, add the digits of the sum to form a new sum.
+// Repeat this process until left with a number less than 10. For example:
+//     num = 123456789
+//     sum = 1+2+3+4+5+6+7+8+9 = 45
+//     45 >= 10, so sum = 4+5 = 9
+//     9 < 10, so the digital sum of 123456789 is 9
+PeUint DigitalSum(PeUint num)
+{
+	PeUint sum = 0;
+	PeUint tmp_num = num;
+
+	// Outer loop: calculate sum of digits, check if sum > 9 and repeat with
+	// the number replaced by the previous sum until sum <= 9
+	do {
+		sum = 0;
+
+		// Internal loop to calculate sum of digits for the current number
+		while (tmp_num > 0) {
+			sum += (tmp_num % 10);
+			tmp_num /= 10; // Integer division
+		}
+		tmp_num = sum;
+	} while (sum > 9);
+
+	return sum;
+}
+
 // Return a vector containing all factors of <trial_number>,
 // from 1...trial_number.
 // This is done by simply trialing each integer from 1...sqrt(trial_number)
@@ -214,60 +242,6 @@ PeUint FibonacciExact(PeUint n)
 
     return ff[n];
 }
-
-
-// Greatest common divisor
-////template<typename T>
-////typename enable_if<is_integral<T>::value, T>::type Gcd(T a, T b)
-////{
-////	// Alternative for a while (true)
-////	// This could also be implemented using recursion,
-////	// I've gone with looping here since the code is
-////	// similarly clear (IMO) and this uses less of the
-////	// call stack.
-////    for (;;) {
-////        if (a == 0) {
-////			return b;
-////		}
-////        b %= a;
-////
-////        if (b == 0) {
-////			return a;
-////		}
-////        a %= b;
-////    }
-////}
-
-//////// Greatest common divisor using Euler's algorithm
-//////template <typename IntType>
-//////IntType Gcd(IntType a, IntType b)
-//////{
-//////	// Alternative for a while (true)
-//////	// This could also be implemented using recursion,
-//////	// I've gone with looping here since the code is
-//////	// similarly clear (IMO) and this uses less of the
-//////	// call stack.
-//////    for (;;) {
-//////        if (a == 0) {
-//////			return b;
-//////		}
-//////        b %= a;
-//////
-//////        if (b == 0) {
-//////			return a;
-//////		}
-//////        a %= b;
-//////    }
-//////}
-//////
-//////template int8_t Gcd<int8_t>(int8_t a, int8_t b);
-//////template int16_t Gcd<int16_t>(int16_t a, int16_t b);
-//////template int32_t Gcd<int32_t>(int32_t a, int32_t b);
-//////template int64_t Gcd<int64_t>(int64_t a, int64_t b);
-//////template uint8_t Gcd<uint8_t>(uint8_t a, uint8_t b);
-//////template uint16_t Gcd<uint16_t>(uint16_t a, uint16_t b);
-//////template uint32_t Gcd<uint32_t>(uint32_t a, uint32_t b);
-//////template uint64_t Gcd<uint64_t>(uint64_t a, uint64_t b);
 
 
 // Generate array of primes up to <limit> using the
@@ -603,6 +577,21 @@ PeUint ReverseDigits(PeUint num)
         num /= 10; // Integer division
     }
     return rev_num;
+}
+
+// Calculate the sum of the digits of <num>. This is not the same as the
+// "digital sum" common in number theory since it only does the first pass
+// of that calculation.
+PeUint SumDigits(PeUint num)
+{
+	PeUint sum = 0;
+
+	while (num > 0) {
+		sum += (num % 10);
+		num /= 10; // Integer division
+	}
+
+	return sum;
 }
 
 // The nth pyramid number, the sum of integers from 1 to n

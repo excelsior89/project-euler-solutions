@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "PeDefinitions.h"
+#include "PeUtilities.h"
 
 namespace pe {
 	
@@ -85,25 +86,25 @@ public:
 
 	// Friends defined inside class body are inline and are hidden from non-ADL lookup
 	// Passing lhs by value helps optimise chains like a+b+c
-	friend PeBigInt operator+(PeBigInt lhs, const PeBigInt& rhs)
+	friend inline PeBigInt operator+(PeBigInt lhs, const PeBigInt& rhs)
 	{
 		lhs += rhs; // Reuse compound assignment
 		return lhs; // Return the result by value (uses move constructor)
 	}
 
-	friend PeBigInt operator-(PeBigInt lhs, const PeBigInt& rhs)
+	friend inline PeBigInt operator-(PeBigInt lhs, const PeBigInt& rhs)
 	{
 		lhs -= rhs;
 		return lhs;
 	}
 
-	friend PeBigInt operator*(PeBigInt lhs, const PeBigInt& rhs)
+	friend inline PeBigInt operator*(PeBigInt lhs, const PeBigInt& rhs)
 	{
 		lhs *= rhs;
 		return lhs;
 	}
 
-	friend PeBigInt operator/(PeBigInt lhs, const PeBigInt& rhs)
+	friend inline PeBigInt operator/(PeBigInt lhs, const PeBigInt& rhs)
 	{
 		lhs /= rhs;
 		return lhs;
@@ -130,10 +131,22 @@ public:
 
 	// Convenience zero test
 	bool isZero() const;
+
+	// Raise number to the power n
+	PeBigInt &PeBigInt::power(PeUint exponent);
 	
 	// Radix shift, analogous to << and >> for binary
-	void radixShift(int n);
+	PeBigInt &radixShift(PeInt n);
 
+	// Reverse this number's digits
+	PeBigInt &reverseDigits();
+
+	// Square this number i.e. n = n * n
+	// Used as a helper function for power()
+	PeBigInt &PeBigInt::square();
+
+	// Return the sum of this number's digits (ignores sign)
+	PeBigInt sumDigits();
 
 	// Private helper functions
 private:
@@ -162,26 +175,23 @@ private:
 	// Divide by a denominator less than kBase.
 	// Note that denominator is not checked against kBase;
 	// dividing by a denominator greater than kBase is undefined.
-	PeBigInt &absShortDivEq(int denominator);
+	PeBigInt &absShortDivEq(PeInt denominator);
 
 	// Utility
 
 	// Remove any leading zeros
 	void popLeadingZeros();
 
-
-	void shortDivision(int divisor, int &quotient);
-
 	// Members
 private:
 	int sign_;
-	std::vector<int> digits_;
+	std::vector<PeUint> digits_;
 
 	// The base used in our representation
 	// and its power of ten, useful for determining
 	// string lengths and radix shifts
-	static const int kBase = 10;
-	static const int kBasePower = 1;
+	static const PeUint kBase = 100000000;
+	static const PeUint kBasePower = 8;
 
 	// Static regex for matching initialiser string
 	static const std::regex kValueStringRe;

@@ -57,6 +57,15 @@ std::unordered_map<PeUint, PeUint> CollatzGraphIterations(const PeUint depth_lim
 // even though the starting value is limited to only regular (32 bit) integers.
 std::vector<PeUint> CollatzSequence(const PeUint starting_value);
 
+// Calculate the digit sum of the of <num>: first, add the digits of <num>.
+// If this sum is greater than 10, add the digits of the sum to form a new sum.
+// Repeat this process until left with a number less than 10. For example:
+//     num = 123456789
+//     sum = 1+2+3+4+5+6+7+8+9 = 45
+//     45 > 10, so sum = 4+5 = 9
+//     9 < 10, so the digital sum of 123456789 is 9
+PeUint DigitalSum(PeUint num);
+
 // Return a vector containing all factors of <trial_number>,
 // from 1...trial_number. O(sqrt(n)).
 std::vector<PeUint> Factors(PeUint trial_number);
@@ -144,6 +153,11 @@ std::vector<PeUint> PrimeFactors(PeUint trial_number);
 // Reverse an integers digits, useful for testing palindromes
 PeUint ReverseDigits(PeUint num);
 
+// Calculate the sum of the digits of <num>. This is not the same as the
+// "digital sum" common in number theory since it only does the first pass
+// of that calculation.
+PeUint SumDigits(PeUint num);
+
 // The nth pyramid number, the sum of integers from 1 to n
 // Uses the analytic formula sum = (n*(n+1))/2
 PeUint SumOfOneToN(PeUint n);
@@ -171,10 +185,10 @@ namespace profiling {
 // with a formatted header indicating this is method 1, to the stream std::cout.
 template<typename ReturnType, typename ...InputTypes>
 void TimeProfileFunction(int method_number,
-							int number_of_trials,
-							std::ostream &os,
-							ReturnType (profile_func)(InputTypes...),
-							InputTypes ...inputs)
+						 int number_of_trials,
+						 std::ostream &os,
+						 ReturnType (profile_func)(InputTypes...),
+						 InputTypes ...inputs)
 {
 	// Function timing itself
 	clock_t start_time(clock());
@@ -190,6 +204,66 @@ void TimeProfileFunction(int method_number,
 		"Time average over " << number_of_trials << " trials: " <<
 		static_cast<long double>(time_taken) / static_cast<long double>(number_of_trials) << 
 		endl << endl;
+}
+
+// Do a simple "time trial" of functions by running each one for a fixed number
+// of trials with the same inputs to give a crude assessment of their relative
+// performance. Display the average time (using ctime's clock()) per trial on
+// the console.
+// This uses variadic templating to achieve more general use. An example call:
+//
+//		TimeProfileFunctions<PeUint, PeUint>(100, std::cout, {Method1, Method2}, 20);
+//
+// This would call "Method1(20)" 100 times, then call "Method2(20)" 100 times
+// and write the resulting time for each method, with a formatted header for each,
+// to the stream std::cout.
+template<typename ReturnType, typename ...InputTypes>
+void TimeProfileFunctions(int number_of_trials,
+							std::ostream &os,
+							const std::vector<ReturnType (*)(InputTypes...)> &profile_funcs,
+							InputTypes ...inputs)
+{
+	// Loop over each function passed in and do a time trial
+	for (size_t i_func = 0; i_func < profile_funcs.size(); ++i_func) {
+		// Function timing itself
+		clock_t start_time(clock());
+		for (int i_trials = 0; i_trials < number_of_trials; ++i_trials) {
+			(profile_funcs[i_func])(inputs...);
+		}
+		clock_t time_taken = clock() - start_time;
+
+		// Formatted output display
+		os << formatting::MethodHeader(i_func + 1) << endl << endl <<
+			"Time average over " << number_of_trials << " trials: " <<
+			static_cast<long double>(time_taken) / static_cast<long double>(number_of_trials) << 
+			endl << endl;
+	}
+}
+
+// Convenience macro for profiling
+// Any callers must define the following macros locally:
+// PROFILE_RETURN_TYPE_ contains the return type
+// PROFILE_INPUT_TYPES_ contains a comma separated list of input types
+// PROFILE_ARGS_ 1000, 3, 5 contains a comma separated list of values/initialisers
+//
+// For example:
+//     #define PROFILE_RETURN_TYPE_ PeUint
+//     #define PROFILE_INPUT_TYPES_ PeUint, PeUint, PeUint
+//     #define PROFILE_ARGS_ 1000, 3, 5
+//     PROFILE_SOLUTIONS(Method1, Method2)
+#define PROFILE_SOLUTIONS(PROBLEM_NAMESPACE_, ...) \
+ostream &PROBLEM_NAMESPACE_::ProfileSolutions(int n_trials, ostream &os) \
+{ \
+	os << formatting::ProfileHeader(kProblemNumber) << endl << endl; \
+\
+	const vector<PROFILE_RETURN_TYPE_ (*)(PROFILE_INPUT_TYPES_)> profile_funcs = { \
+		__VA_ARGS__ \
+	}; \
+\
+	profiling::TimeProfileFunctions<PROFILE_RETURN_TYPE_, PROFILE_INPUT_TYPES_>( \
+		n_trials, os, profile_funcs, PROFILE_ARGS_); \
+\
+	return os; \
 }
 
 }; // namespace profiling

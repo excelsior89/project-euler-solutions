@@ -60,13 +60,15 @@ ostream &PeProblem1::DisplayProblem(ostream &os)
 
 ostream &PeProblem1::DisplaySolution(ostream &os)
 {
+	const PeUint kLimit = 1000, kA = 3, kB = 5;
+
 	os << formatting::SolutionHeader(kProblemNumber) << endl << endl <<
-		"Answer: " << Method2(1000, 3, 5) << endl << endl <<
+		"Answer: " << Method2(kLimit, kA, kB) << endl << endl <<
 		formatting::MethodHeader(1) << endl << endl <<
 		"Simple brute-force summation can easily compute the answer:" << endl <<
 		"Loop over integers from 1 to 1000, check for divisibility by 3 or 5 "
 		"and accumulate the sum." << endl << endl <<
-		"Method 1 solution: " << Method1(1000, 3, 5) << endl << endl <<
+		"Method 1 solution: " << Method1(kLimit, kA, kB) << endl << endl <<
 
 		formatting::MethodHeader(2) << endl << endl <<
 		"A more elegant solution:" << endl <<
@@ -85,27 +87,21 @@ ostream &PeProblem1::DisplaySolution(ostream &os)
 		"S_5  = sum(5n)  for n = [1 ... floor(999/5)]  = 5*(199^2 + 199)/2" << endl <<
 		"S_15 = sum(15n) for n = [1 ... floor(999/15)] = 15*(66^2 + 66)/2" << endl <<
 		"S = S_3 + S_5 - S_15 = 166833 + 99500 - 33165 = 233168" << endl << endl <<
-		"Method 2 solution: " << Method2(1000, 3, 5) << endl << endl;
+		"Method 2 solution: " << Method2(kLimit, kA, kB) << endl << endl;
 
 	return os;
 }
 
-#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint, PeUint, PeUint>
+// Solution profiling
 
-ostream &PeProblem1::ProfileSolutions(int n_trials, ostream &os)
-{
-	// Display header
-	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
+#define PROFILE_RETURN_TYPE_ PeUint
+#define PROFILE_INPUT_TYPES_ PeUint, PeUint, PeUint
+#define PROFILE_ARGS_ 1000, 3, 5
 
-	const PeUint kLimit = 1000, a = 3, b = 5;
+PROFILE_SOLUTIONS(PeProblem1, Method1, Method2)
 
-	// Profile each method
-	ProfilingFunc(1, n_trials, os, Method1, kLimit, a, b);
-	ProfilingFunc(2, n_trials, os, Method2, kLimit, a, b);
-
-	return os;
-}
-
-#undef ProfilingFunc
+#undef PROFILE_RETURN_TYPE_
+#undef PROFILE_INPUT_TYPES_
+#undef PROFILE_ARGS_
 
 }; // namespace pe

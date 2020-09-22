@@ -283,21 +283,16 @@ ostream &PeProblem8::DisplaySolution(ostream &os)
 	return os;
 }
 
-#define ProfilingFunc profiling::TimeProfileFunction<PeUint, const vector<PeUint> &, size_t>
+// Solution profiling
 
-ostream &PeProblem8::ProfileSolutions(int n_trials, ostream &os)
-{
-	// Display header
-	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
+#define PROFILE_RETURN_TYPE_ PeUint
+#define PROFILE_INPUT_TYPES_ const vector<PeUint> &, size_t
+#define PROFILE_ARGS_ kNumber, kWindowSize
 
-	// Profile each method
-	ProfilingFunc(1, n_trials, os, Method1, kNumber, kWindowSize);
-	ProfilingFunc(2, n_trials, os, Method2, kNumber, kWindowSize);
-	ProfilingFunc(3, n_trials, os, Method3, kNumber, kWindowSize);
+PROFILE_SOLUTIONS(PeProblem8, Method1, Method2, Method3)
 
-	return os;
-}
-
-#undef ProfilingFunc
+#undef PROFILE_RETURN_TYPE_
+#undef PROFILE_INPUT_TYPES_
+#undef PROFILE_ARGS_
 
 }; // namespace pe

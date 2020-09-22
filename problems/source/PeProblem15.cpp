@@ -262,22 +262,32 @@ ostream &PeProblem15::DisplaySolution(ostream &os)
 	return os;
 }
 
-#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint>
+//#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint>
+//
+//ostream &PeProblem15::ProfileSolutions(int n_trials, ostream &os)
+//{
+//	// Display header
+//	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
+//
+//	const PeUint kGridSize = 50;
+//
+//	// Profile each method
+//	ProfilingFunc(1, n_trials, os, Method1, kGridSize);
+//	ProfilingFunc(2, n_trials, os, Method2, kGridSize);
+//
+//	return os;
+//}
 
-ostream &PeProblem15::ProfileSolutions(int n_trials, ostream &os)
-{
-	// Display header
-	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
+// Solution profiling
 
-	const PeUint kGridSize = 50;
+#define PROFILE_RETURN_TYPE_ PeUint
+#define PROFILE_INPUT_TYPES_ PeUint
+#define PROFILE_ARGS_ 50
 
-	// Profile each method
-	ProfilingFunc(1, n_trials, os, Method1, kGridSize);
-	ProfilingFunc(2, n_trials, os, Method2, kGridSize);
+PROFILE_SOLUTIONS(PeProblem15, Method1, Method2)
 
-	return os;
-}
-
-#undef ProfilingFunc
+#undef PROFILE_RETURN_TYPE_
+#undef PROFILE_INPUT_TYPES_
+#undef PROFILE_ARGS_
 
 }; // namespace pe

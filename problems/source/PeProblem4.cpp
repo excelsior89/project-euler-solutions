@@ -225,23 +225,16 @@ ostream &PeProblem4::DisplaySolution(ostream &os)
 	return os;
 }
 
-#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint>
+// Solution profiling
 
-ostream &PeProblem4::ProfileSolutions(int n_trials, ostream &os)
-{
-	// Display header
-	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
+#define PROFILE_RETURN_TYPE_ PeUint
+#define PROFILE_INPUT_TYPES_ PeUint
+#define PROFILE_ARGS_ 3
 
-	const PeUint kDigitSize = 3;
+PROFILE_SOLUTIONS(PeProblem4, Method1, Method2, Method3)
 
-	// Profile each method
-	ProfilingFunc(1, n_trials, os, Method1, kDigitSize);
-	ProfilingFunc(2, n_trials, os, Method2, kDigitSize);
-	ProfilingFunc(3, n_trials, os, Method3, kDigitSize);
-
-	return os;
-}
-
-#undef ProfilingFunc
+#undef PROFILE_RETURN_TYPE_
+#undef PROFILE_INPUT_TYPES_
+#undef PROFILE_ARGS_
 
 }; // namespace pe

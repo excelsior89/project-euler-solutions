@@ -271,7 +271,7 @@ PeBigInt &PeBigInt::operator/=(const PeBigInt &rhs)
 PeBigInt::operator PeInt() const
 {
 	// Work out longest decimal size supported, subtracting one
-	// from the power of 2 since we only support the positive "half" of int range
+	// from the power of 2 since we only support the positive "half" of PeInt range
 	size_t digitsize =
 		(size_t)floor((double)(8 * sizeof(PeInt) - 1) * log10(2.0));
 
@@ -436,8 +436,9 @@ PeBigInt::operator string() const
 	ss << digits_.back();
 
 	// Write remaining digits with zero padding
-	for (int i = (int)digits_.size() - 2; i >= 0; --i) {
-		ss << setfill('0') << setw(kBasePower) << digits_[i];
+	auto i_digit = digits_.rbegin() + 1; 
+	for (; i_digit != digits_.rend(); ++i_digit) {
+		ss << setfill('0') << setw(kBasePower) << *i_digit;
 	}
 
 	return ss.str();
@@ -495,7 +496,7 @@ bool PeBigInt::absLt(const PeBigInt &rhs) const
 // Arithmetic
 PeBigInt &PeBigInt::absPlusEq(const PeBigInt &rhs)
 {
-	int carry = 0;
+	PeUint carry = 0;
 
 	// Loop over digits up to size of large number, with an extra loop if carry occurs
 	for (size_t i = 0; i < std::max(digits_.size(), rhs.digits_.size()) || carry; ++i) {
@@ -521,7 +522,7 @@ PeBigInt &PeBigInt::absPlusEq(const PeBigInt &rhs)
 // behaviour occurs
 PeBigInt &PeBigInt::absMinusEq(const PeBigInt &rhs)
 {
-	int carry = 0;
+	PeUint carry = 0;
 
 	// Loop over rhs digits, or until carry occurs
 	for (size_t i = 0; i < rhs.digits_.size() || carry; ++i) {
@@ -545,17 +546,18 @@ PeBigInt &PeBigInt::absMinusEq(const PeBigInt &rhs)
 PeBigInt &PeBigInt::absMultEq(const PeBigInt &rhs)
 {
 	// Result digits
-	vector<int> res(digits_.size() + rhs.digits_.size(), 0);
+	vector<PeUint> res(digits_.size() + rhs.digits_.size(), 0);
 
+	PeUint carry = 0;
 	// Outer loop over this numbers digits
 	for (size_t i = 0; i < digits_.size(); ++i) {
 		// Inner loop over rhs digits with extra pass if carry occurs
-		for (int j = 0, carry = 0; (j < (int)rhs.digits_.size()) || carry; ++j) {
+		for (size_t j = 0; (j < rhs.digits_.size()) || carry; ++j) {
 			PeInt cur = res[i + j] + digits_[i] *
-				(j < (int)rhs.digits_.size() ? rhs.digits_[j] : 0) + carry;
+				(j < rhs.digits_.size() ? rhs.digits_[j] : 0) + carry;
 
-			res[i + j] = (int)(cur % kBase);
-			carry = (int)(cur / kBase);
+			res[i + j] = cur % kBase;
+			carry = cur / kBase;
 		}
 	}
 
@@ -582,9 +584,9 @@ PeBigInt &PeBigInt::absDivEq(const PeBigInt &rhs)
 	// Quick check for same abs value:
 	// just set this value to 1.
 	if (absEq(rhs)) {
-		digits_ = vector<int>({1});
+		digits_ = vector<PeUint>({1});
 	} else if (absLt(rhs)) {
-		digits_ = vector<int>({0});
+		digits_ = vector<PeUint>({0});
 	} else {
 		// Copy this and rhs and set signs to positive
 		PeBigInt numerator(*this);
@@ -593,11 +595,10 @@ PeBigInt &PeBigInt::absDivEq(const PeBigInt &rhs)
 		denominator.sign_ = 1;
 
 		// Record the lengths of the numerator and denominator as integers
-		int numerator_length = (int)(numerator.digits_.size()),
-			denominator_length = (int)(denominator.digits_.size());
+		int denominator_length = (int)(denominator.digits_.size());
 
 		// The "quick denominator" is the leading digit of the denominator
-		int quick_d = denominator.digits_.back();
+		PeUint quick_d = denominator.digits_.back();
 
 		// Initialise the quotient as numerator / a
 		PeBigInt quotient(numerator);
@@ -635,15 +636,15 @@ PeBigInt &PeBigInt::absDivEq(const PeBigInt &rhs)
 
 // Divide by a denominator less than kBase
 // Note this doesn't check
-PeBigInt &PeBigInt::absShortDivEq(int denominator)
+PeBigInt &PeBigInt::absShortDivEq(PeInt denominator)
 {
-	int carry = 0;
+	PeUint carry = 0;
 
 	// Loop over this number's digits in reverse order
-	for (auto ai = digits_.rbegin(); ai != digits_.rend(); ++ai) {
-		PeInt cur = *ai + carry * kBase;
-		*ai = (int)(cur / denominator);
-		carry = (int)(cur % denominator);
+	for (auto i = digits_.rbegin(); i != digits_.rend(); ++i) {
+		PeUint cur = *i + carry * kBase;
+		*i = cur / denominator;
+		carry = cur % denominator;
 	}
 
 	popLeadingZeros();
@@ -690,7 +691,7 @@ void PeBigInt::fromUnsigned(PeUint val)
 		digits_.push_back(val % kBase);
 		val /= kBase;
 	}
-	digits_.push_back((int)val);
+	digits_.push_back(val);
 }
 
 // String must match the regex [-+]?[0-9]+([eE][0-9]+)?
@@ -744,13 +745,11 @@ void PeBigInt::fromString(const string &valstr)
 
 
 		// Initialise base value
-		for (int i = (int)strbase.length(); i > 0; i -= kBasePower) {
-			if (i < kBasePower) {
-				digits_.push_back(stoi(strbase.substr(0, i)));
-			} else {
-				digits_.push_back(stoi(strbase.substr(i - kBasePower, kBasePower)));
-			}
+		PeUint i = (PeUint)strbase.length();
+		for (; i > kBasePower; i -= kBasePower) {
+			digits_.push_back(stoull(strbase.substr(i - kBasePower, kBasePower)));
 		}
+		digits_.push_back(stoull(strbase.substr(0, i)));
 
 		// Apply exponent as radix shift
 		radixShift(exp_value);
@@ -777,16 +776,42 @@ void PeBigInt::popLeadingZeros()
 	}
 }
 
+PeBigInt &PeBigInt::power(PeUint exponent)
+{
+	// Only act on positive exponents
+	if (exponent > 0) {
+		PeBigInt tmp_val(1);
+
+		// Square this number and halve the exponent until exponent is zero
+		while (exponent > 1) {
+			if (math::IsOdd(exponent)) {
+				// If exponent is odd, accumuluate a multiplication in
+				// tmp_val before squaring
+				tmp_val *= *this;
+			}
+
+			// Square current number and halve exponent
+			square();
+			exponent /= 2; // Integer division
+		}
+
+		// Accumulate any "odd division" steps from above
+		operator*=(tmp_val);
+	}
+
+	return *this;
+}
+
 // Radix shift function, equivalent to multiplying/dividing by kBase^n
 // Analogous to << and >> operators in binary
 // Positive n gives left shift (multiplies), negative n gives right shift (divides)
-void PeBigInt::radixShift(int n)
+PeBigInt &PeBigInt::radixShift(PeInt n)
 {
 	// Right shift of more than digit size sets number to zero
-	if ((int)digits_.size() + n <= 0) {
+	if ((PeInt)digits_.size() + n <= 0) {
 		digits_.clear();
 		digits_.push_back(0);
-		return;
+		return *this;
 	}
 
 	
@@ -800,27 +825,65 @@ void PeBigInt::radixShift(int n)
 	} else if (n < 0) { // Right shift - remove elements at front
 		digits_.erase(digits_.begin(), digits_.begin() - n);
 	}
+
+	return *this;
 }
 
-// Helper function for ultimately doing long division
-// <divisor> MUST be less than kBase
-// undefined behaviour if not
-// <digits> and <quotient> are modified
-void PeBigInt::shortDivision(int divisor, int &quotient)
+// Reverse this number's digits
+PeBigInt &PeBigInt::reverseDigits()
 {
-	int carry = 0;
+	// First, reverse the digits array
+	reverse(digits_.begin(), digits_.end());
 
-	// Loop over this number's digits in reverse order
-	for (auto ai = digits_.rbegin(); ai != digits_.rend(); ++ai) {
-		PeInt cur = *ai + carry * kBase;
-		*ai = (int)(cur / divisor);
-		carry = (int)(cur % divisor);
+	// Not using accumulate here because we want PeBigInt in case we have overflow
+	for (auto &i : digits_) {
+		i = math::ReverseDigits(i);
 	}
 
-	// Remove any leading zeros
-	while (digits_.size() > 1 && digits_.back() == 0) {
-		digits_.pop_back();
+	return *this;
+}
+
+// Square this number i.e. n = n * n
+// Used as a helper function for power()
+PeBigInt &PeBigInt::square()
+{
+	// Result digits
+	vector<PeUint> res(2 * digits_.size(), 0);
+
+	// Outer loop over this numbers digits
+	for (size_t i = 0; i < digits_.size(); ++i) {
+		// Inner loop over rhs digits with extra pass if carry occurs
+		for (size_t j = 0, carry = 0; (j < digits_.size()) || carry; ++j) {
+			PeInt cur = res[i + j] + digits_[i] *
+				(j < digits_.size() ? digits_[j] : 0) + carry;
+
+			res[i + j] = (int)(cur % kBase);
+			carry = (size_t)(cur / kBase);
+		}
 	}
+
+	// Clear any leading zeros
+	while ((res.size() > 1) && (res.back() == 0)) {
+		res.pop_back();
+	}
+
+	// Move result to this
+	digits_ = move(res);
+
+	return *this;
+}
+
+// Return the sum of this number's digits (ignores sign)
+PeBigInt PeBigInt::sumDigits()
+{
+	PeBigInt digit_sum(0);
+
+	// Not using accumulate here because we want PeBigInt in case we have overflow
+	for (const auto &i : digits_) {
+		digit_sum += PeBigInt(i);
+	}
+
+	return digit_sum;
 }
 	
 } // namespace pe
