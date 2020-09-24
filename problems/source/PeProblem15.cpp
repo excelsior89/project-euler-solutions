@@ -262,22 +262,6 @@ ostream &PeProblem15::DisplaySolution(ostream &os)
 	return os;
 }
 
-//#define ProfilingFunc profiling::TimeProfileFunction<PeUint, PeUint>
-//
-//ostream &PeProblem15::ProfileSolutions(int n_trials, ostream &os)
-//{
-//	// Display header
-//	os << formatting::ProfileHeader(kProblemNumber) << endl << endl;
-//
-//	const PeUint kGridSize = 50;
-//
-//	// Profile each method
-//	ProfilingFunc(1, n_trials, os, Method1, kGridSize);
-//	ProfilingFunc(2, n_trials, os, Method2, kGridSize);
-//
-//	return os;
-//}
-
 // Solution profiling
 
 #define PROFILE_RETURN_TYPE_ PeUint

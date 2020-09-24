@@ -880,7 +880,7 @@ PeBigInt PeBigInt::sumDigits()
 
 	// Not using accumulate here because we want PeBigInt in case we have overflow
 	for (const auto &i : digits_) {
-		digit_sum += PeBigInt(i);
+		digit_sum += PeBigInt(math::SumDigits(i));
 	}
 
 	return digit_sum;
