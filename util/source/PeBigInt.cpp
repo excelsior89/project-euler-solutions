@@ -557,7 +557,7 @@ PeBigInt &PeBigInt::absMultEq(const PeBigInt &rhs)
 				(j < rhs.digits_.size() ? rhs.digits_[j] : 0) + carry;
 
 			res[i + j] = cur % kBase;
-			carry = cur / kBase;
+			carry = cur / kBase; // Integer division
 		}
 	}
 
