@@ -1,4 +1,4 @@
-// Copyright 2020 Paul Robertson
+// Copyright 2020-2021 Paul Robertson
 //
 // PeUtilities.h
 //
@@ -145,6 +145,18 @@ PeUint Lcm(PeUint a, PeUint b);
 // Using PeUint (64 bit unsigned) this will first overflow n = 67, k = 32.
 // Values of n < 67 won't overflow for any valid k.
 PeUint NChooseK(PeUint n, PeUint k);
+
+// Return "radix buckets" of a number n with a given radix.
+// For radix = 10, this will simply be a vector with each separate
+// digit of n as one element of the vector e.g.
+//   n = 1234, radix = 10 returns {4, 3, 2, 1}
+// Note the "reverse order" which means element indices correspond
+// to the radix power for each bucket. For the above example,
+// we see that ind(4) = 0, i.e. 4 is in the 10^0 (ones) bucket,
+// while ind(3) = 1, i.e. 3 is in the 10^1 (tens) bucket.
+// Radix can be set to other values too.
+// Setting n = 1234, radix = 100 returns {43, 21}.
+std::vector<PeUint> NumberToRadixBuckets(PeUint n, PeUint radix);
 
 // Find the prime factors of <trial_number>
 // Wheel Factorisation method with a basis of (2,3,5).

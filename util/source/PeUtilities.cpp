@@ -1,4 +1,4 @@
-// Copyright 2020 Paul Robertson
+// Copyright 2020-2021 Paul Robertson
 //
 // PeUtilities.cpp
 //
@@ -475,6 +475,29 @@ PeUint NChooseK(PeUint n, PeUint k)
     }
 
     return num;
+}
+
+// Return "radix buckets" of a number n with a given radix.
+// For radix = 10, this will simply be a vector with each separate
+// digit of n as one element of the vector e.g.
+//   n = 1234, radix = 10 returns {4, 3, 2, 1}
+// Note the "reverse order" which means element indices correspond
+// to the radix power for each bucket. For the above example,
+// we see that ind(4) = 0, i.e. 4 is in the 10^0 (ones) bucket,
+// while ind(3) = 1, i.e. 3 is in the 10^1 (tens) bucket.
+// Radix can be set to other values too.
+// Setting n = 1234, radix = 100 returns {43, 21}.
+vector<PeUint> NumberToRadixBuckets(PeUint n, PeUint radix)
+{
+	vector<PeUint> buckets;
+
+	while (n > radix) {
+		buckets.push_back(n % radix);
+		n /= radix; // Integer division
+	}
+	buckets.push_back(n);
+
+	return buckets;
 }
 
 
