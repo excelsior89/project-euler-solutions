@@ -12,7 +12,7 @@ cd build_windows
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
 rem Run CMake targeting VS2017 and 64bit architecture
-cmake -G "Visual Studio 15 2017" -A x64 %* ..
+cmake -G "Visual Studio 16 2019" -A x64 %* ..
 cmake --build . --target install --config %build% -- /M
 
 rem Now install the build target
