@@ -491,7 +491,7 @@ vector<PeUint> NumberToRadixBuckets(PeUint n, PeUint radix)
 {
 	vector<PeUint> buckets;
 
-	while (n > radix) {
+	while (n >= radix) {
 		buckets.push_back(n % radix);
 		n /= radix; // Integer division
 	}
