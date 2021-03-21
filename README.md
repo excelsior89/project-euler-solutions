@@ -4,12 +4,12 @@ Solutions to a selection of the problems in [Project Euler](https://projecteuler
 The intention behind this repository is primarily to have a cloud backup of my personal solutions and to provide an easy way to share my solutions with other interested parties. **Please bear in mind that you should refrain from browsing the solutions to any problems you wish to solve yourself** (as mentioned on the Project Euler site).
 
 ## Dependencies
-This project is developed in C++ using [Visual Studio 2017](https://visualstudio.microsoft.com/vs/older-downloads/). I've tried to avoid using any third party libraries so far, so the code should be able to build using any C++ compiler that supports C++14.
+This project is developed in C++ using [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/). I've tried to avoid using any third party libraries so far, so the code should be able to build using any C++ compiler that supports C++17 (realistically C++14 should cover it, but as time goes on it's more likely I'll have used C++17 features).
 
 I've used [CMake](https://cmake.org/) to generate and build the solution files. The minimum version of CMake is set to 3.15 (the version I had installed when I created the files), it might work with earlier versions, although I'm reasonably sure you'll need at least 3.8.
 
 ## Building
-Once you have CMake installed on your system path and have Visual Studio 2017, building should be as simple as running the build script "build_windows.cmd". This should build everything under a directory called "build_windows", and also place a copy of the compiled executable in a "bin" directory. I've included "build_mac.sh" (XCode) and "build_linux.sh" (Make) as examples for building on other systems, however these are totally untested.
+Once you have CMake installed on your system path and have Visual Studio 2019, building should be as simple as running the build script "build_windows.cmd". This should build everything under a directory called "build_windows", and also place a copy of the compiled executable in a "bin" directory. I've included "build_mac.sh" (XCode) and "build_linux.sh" (Make) as examples for building on other systems, however these are totally untested.
 
 ## Running
 The project builds as a command line application and I've tried to make it self-explanatory. When prompted, enter the problem number you're interested in. You can then choose to just run the problem, or do profiling. You can run multiple problems – the application will keep prompting for a problem number until you enter 0 to exit.
