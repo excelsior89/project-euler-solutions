@@ -4,7 +4,7 @@
 //
 // "Number letter counts"
 
-#include "PeProblem17.h"
+#include "PeProblem17.cpp"
 
 #include "PeBigInt.h"
 

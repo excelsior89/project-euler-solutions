@@ -1,6 +1,6 @@
 // Copyright 2020-2021 Paul Robertson
 //
-// PeProblem16.h
+// PeProblem16.cpp
 //
 // "Power digit sum"
 
