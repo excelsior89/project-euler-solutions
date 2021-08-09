@@ -1,10 +1,10 @@
 // Copyright 2020-2021 Paul Robertson
 //
-// PeProblem17.h
+// PeProblem17.cpp
 //
 // "Number letter counts"
 
-#include "PeProblem17.cpp"
+#include "PeProblem17.h"
 
 #include "PeBigInt.h"
 
