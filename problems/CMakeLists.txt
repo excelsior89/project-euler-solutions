@@ -1,4 +1,4 @@
-# Copyright 2020 Paul Robertson
+# Copyright 2020-2021 Paul Robertson
 
 # A simple CMake file to collect the list of source files
 # in this directory (and subdirectories) and store them
@@ -24,6 +24,9 @@ set(HEADER_FILES
 	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem14.h
 	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem15.h
 	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem16.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem17.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem18.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem19.h
 )
 
 set(SOURCE_FILES
@@ -43,4 +46,7 @@ set(SOURCE_FILES
 	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem14.cpp
 	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem15.cpp
 	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem16.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem17.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem18.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem19.cpp
 )
