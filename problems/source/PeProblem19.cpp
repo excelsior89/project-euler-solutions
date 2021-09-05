@@ -265,9 +265,9 @@ ostream &PeProblem19::DisplayProblem(ostream &os)
 
 ostream &PeProblem19::DisplaySolution(ostream &os)
 {
-	PeDate start_date(1900, 1 /* Jan */, 1, 0 /* Monday */);
+	PeDate start_date(1901, 1 /* Jan */, 1, 1 /* Tuesday */);
 	PeDate end_date(2000, 12 /* Dec */, 31, 6 /* Sunday */);
-	PeInt target_date = 1, target_day = 0;
+	PeInt target_date = 1, target_day = 6;
 
 	auto answer1 = Method1(start_date, end_date, target_date, target_day);
 	auto answer2 = Method2(start_date, end_date, target_date, target_day);
