@@ -25,6 +25,7 @@
 #include "PeProblem17.h"
 #include "PeProblem18.h"
 #include "PeProblem19.h"
+#include "PeProblem20.h"
 
 using namespace std;
 
@@ -50,6 +51,7 @@ PeProblemSelector::PeProblemSelector()
 	problems_.push_back(make_unique<PeProblem17>());
 	problems_.push_back(make_unique<PeProblem18>());
 	problems_.push_back(make_unique<PeProblem19>());
+	problems_.push_back(make_unique<PeProblem20>());
 }
 
 
