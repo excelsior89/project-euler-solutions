@@ -1,4 +1,4 @@
-rem Copyright 2020 Paul Robertson
+rem Copyright 2020-2022 Paul Robertson
 rem
 rem Build script for Windows
 

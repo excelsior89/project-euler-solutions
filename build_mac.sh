@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2020 Paul Robertson
+# Copyright 2020-2022 Paul Robertson
 #
 # Build script for OSX
 #

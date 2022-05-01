@@ -26,7 +26,6 @@ static PeUint Method1(PeUint n)
 	// Iterate up to n and multiply each time to calculate the factorial
 	for (PeUint i = 2; i <= n; ++i) {
 		factorial_calc *= i;
-		cout << PeUint(factorial_calc.sumDigits()) << endl;
 	}
 
 	// Cast to PeUint for returning - this will limit the sum of the digits

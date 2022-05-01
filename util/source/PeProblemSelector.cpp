@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Paul Robertson
+// Copyright 2020-2022 Paul Robertson
 //
 // PeProblemSelector.cpp
 //
@@ -26,6 +26,7 @@
 #include "PeProblem18.h"
 #include "PeProblem19.h"
 #include "PeProblem20.h"
+#include "PeProblem21.h"
 
 using namespace std;
 
@@ -52,12 +53,13 @@ PeProblemSelector::PeProblemSelector()
 	problems_.push_back(make_unique<PeProblem18>());
 	problems_.push_back(make_unique<PeProblem19>());
 	problems_.push_back(make_unique<PeProblem20>());
+	problems_.push_back(make_unique<PeProblem21>());
 }
 
 
 ostream &PeProblemSelector::DisplayProblem(size_t problem_number, ostream &os)
 {
-	if ((problem_number > 0) &&  (problem_number <= problems_.size())) {
+	if ((problem_number > 0) && (problem_number <= problems_.size())) {
 		--problem_number;
 		problems_[problem_number]->DisplayProblem(os);
 		problems_[problem_number]->DisplaySolution(os);
@@ -68,10 +70,9 @@ ostream &PeProblemSelector::DisplayProblem(size_t problem_number, ostream &os)
 	return os;
 }
 
-ostream &PeProblemSelector::ProfileProblem(size_t problem_number, int profile_n_trials,
-	ostream &os)
+ostream &PeProblemSelector::ProfileProblem(size_t problem_number, int profile_n_trials, ostream &os)
 {
-	if ((problem_number > 0) &&  (problem_number <= problems_.size())) {
+	if ((problem_number > 0) && (problem_number <= problems_.size())) {
 		--problem_number;
 		problems_[problem_number]->ProfileSolutions(profile_n_trials, os);
 	} else {

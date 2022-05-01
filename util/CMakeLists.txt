@@ -1,4 +1,4 @@
-# Copyright 2020 Paul Robertson
+# Copyright 2020-2022 Paul Robertson
 
 # A simple CMake file to collect the list of source files
 # in this directory (and subdirectories) and store them

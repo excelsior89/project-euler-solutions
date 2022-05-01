@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Paul Robertson
+// Copyright 2020-2022 Paul Robertson
 //
 // PeProblemSelector.h
 //
@@ -21,8 +21,7 @@ public:
 	virtual ~PeProblemSelector() {}
 
 	std::ostream &DisplayProblem(size_t problem_number, std::ostream &os = std::cout);
-	std::ostream &ProfileProblem(size_t problem_number, int profile_n_trials,
-		std::ostream &os = std::cout);
+	std::ostream &ProfileProblem(size_t problem_number, int profile_n_trials, std::ostream &os = std::cout);
 
 private:
 	std::vector<std::unique_ptr<PeProblem>> problems_;
