@@ -170,6 +170,18 @@ PeUint ReverseDigits(PeUint num);
 // of that calculation.
 PeUint SumDigits(PeUint num);
 
+// Calculate the sum of all divisors of a <num>, including <num> itself.
+// This utilises the prime factorisation of <num> and the formula
+// (using LaTeX notation):
+//    \Pi^{k}_{i=1}{\frac{p_i^{m_i+1} - 1}{p_i - 1}}
+// This method is typically faster for larger numbers (num > ~150000).
+PeUint SumOfDivisorsLargeN(PeUint num);
+
+// Calculate the sum of all divisors of a <num>, including <num> itself.
+// This simply uses "naive" trial division, which may be faster for smaller
+// (< ~150000) numbers than calculating a prime factorisation.
+PeUint SumOfDivisors(PeUint num);
+
 // The nth pyramid number, the sum of integers from 1 to n
 // Uses the analytic formula sum = (n*(n+1))/2
 PeUint SumOfOneToN(PeUint n);

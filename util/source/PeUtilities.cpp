@@ -486,7 +486,7 @@ PeUint NChooseK(PeUint n, PeUint k)
 // we see that ind(4) = 0, i.e. 4 is in the 10^0 (ones) bucket,
 // while ind(3) = 1, i.e. 3 is in the 10^1 (tens) bucket.
 // Radix can be set to other values too.
-// Setting n = 1234, radix = 100 returns {43, 21}.
+// Setting n = 1234, radix = 100 returns {34, 12}.
 vector<PeUint> NumberToRadixBuckets(PeUint n, PeUint radix)
 {
 	vector<PeUint> buckets;
@@ -615,6 +615,76 @@ PeUint SumDigits(PeUint num)
 	}
 
 	return sum;
+}
+
+// Calculate the sum of all divisors of a <num>, including <num> itself.
+// This utilises the prime factorisation of <num> and the formula
+// (using LaTeX notation):
+//    \Pi^{k}_{i=1}{\frac{p_i^{m_i+1} - 1}{p_i - 1}}
+// This method is typically faster for larger numbers (num > ~150000).
+PeUint SumOfDivisorsLargeN(PeUint num)
+{
+	// First get the prime factors of the number
+	vector<PeUint> prime_factors = PrimeFactors(num);
+
+	// The vector of prime factors is sorted, but may contain repeated
+	// elements. A quick way to convert this into unique factors and
+	// powers is to iterate over the vector and use a map.
+	// Since we actually need to use p_i^{m_i+1}, it's easier to calculate
+	// it straightaway here rather than simply count factor occurrences.
+	// E.g. if the factors are (2,2,3,3,5), we want to calculate 2^3, 3^3, 5^2
+	// and obtain the map {{2 : 8}, {3 : 27}, {5 : 25}}
+	unordered_map<PeUint, PeUint> factor_powers;
+
+	for (auto factor : prime_factors) {
+		auto factor_it = factor_powers.find(factor);
+		if (factor_it == factor_powers.end()) {
+			// Insert factor^2 if it's not already in the map
+			factor_powers[factor] = factor * factor;
+		} else {
+			// Otherwise multiply to get the next power
+			factor_powers[factor] *= factor;
+		}
+	}
+
+	// Now that we have the factors with their powers, we calculate
+	// the sum of the divisors as the product of
+	// (p_i^{m_i+1} - 1) / (p_i - 1) for each prime factor p_i.
+	// E.g. if the factors are (2,2,3,3,5), we calculate:
+	// (2^3 - 1)/(2 - 1) * (3^3 - 1)/(3 - 1) * (5^2 - 1)/(5 - 1)
+	PeUint factor_sum = 1;
+
+	for (const auto &factor : factor_powers) {
+		factor_sum *= (factor.second - 1) / (factor.first - 1);
+	}
+
+	return factor_sum;
+}
+
+// Calculate the sum of all divisors of a <num>, including <num> itself.
+// This simply uses "naive" trial division, which is faster for smaller
+// numbers (num < ~150000) than calculating a prime factorisation.
+PeUint SumOfDivisors(PeUint num)
+{
+	// Start with the number itself and one.
+	PeUint factor_sum = num + 1;
+
+	// Trial division from 2 to sqrt(num), adding pairs of divisors
+	PeUint div = 2;
+
+	while (div <= (PeUint)floor(sqrt(num))) {
+		if (num % div == 0) {
+			// Check to avoid double addition of an exact square root
+			if (num == div * div) {
+				factor_sum += div;
+			} else {
+				factor_sum += div + (num / div);
+			}
+		}
+		++div;
+	}
+
+	return factor_sum;
 }
 
 // The nth pyramid number, the sum of integers from 1 to n
