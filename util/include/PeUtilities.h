@@ -268,7 +268,7 @@ void TimeProfileFunctions(int number_of_trials,
 // Any callers must define the following macros locally:
 // PROFILE_RETURN_TYPE_ contains the return type
 // PROFILE_INPUT_TYPES_ contains a comma separated list of input types
-// PROFILE_ARGS_ 1000, 3, 5 contains a comma separated list of values/initialisers
+// PROFILE_ARGS_ contains a comma separated list of values/initialisers
 //
 // For example:
 //     #define PROFILE_RETURN_TYPE_ PeUint

@@ -15,9 +15,9 @@ public:
 	PeProblem1() {}
 	virtual ~PeProblem1() {}
 
-	virtual std::ostream &DisplayProblem(std::ostream &os = std::cout) override;
-	virtual std::ostream &DisplaySolution(std::ostream &os = std::cout) override;
-	virtual std::ostream &ProfileSolutions(int n_trials, std::ostream &os = std::cout) override;
+	std::ostream &DisplayProblem(std::ostream &os = std::cout) override;
+	std::ostream &DisplaySolution(std::ostream &os = std::cout) override;
+	std::ostream &ProfileSolutions(int n_trials, std::ostream &os = std::cout) override;
 
 private:
 	static const int kProblemNumber = 1;
