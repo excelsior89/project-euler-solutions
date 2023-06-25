@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Paul Robertson
+# Copyright 2020-2023 Paul Robertson
 
 # A simple CMake file to collect the list of source files
 # in this directory (and subdirectories) and store them
@@ -8,49 +8,49 @@
 # to be used by parent CMakeLists
 
 set(HEADER_FILES
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem1.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem2.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem3.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem4.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem5.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem6.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem7.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem8.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem9.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem10.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem11.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem12.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem13.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem14.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem15.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem16.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem17.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem18.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem19.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem20.h
-	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem21.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem001.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem002.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem003.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem004.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem005.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem006.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem007.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem008.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem009.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem010.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem011.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem012.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem013.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem014.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem015.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem016.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem017.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem018.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem019.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem020.h
+	${CMAKE_CURRENT_LIST_DIR}/include/PeProblem021.h
 )
 
 set(SOURCE_FILES
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem1.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem2.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem3.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem4.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem5.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem6.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem7.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem8.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem9.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem10.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem11.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem12.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem13.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem14.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem15.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem16.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem17.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem18.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem19.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem20.cpp
-	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem21.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem001.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem002.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem003.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem004.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem005.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem006.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem007.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem008.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem009.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem010.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem011.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem012.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem013.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem014.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem015.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem016.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem017.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem018.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem019.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem020.cpp
+	${CMAKE_CURRENT_LIST_DIR}/source/PeProblem021.cpp
 )

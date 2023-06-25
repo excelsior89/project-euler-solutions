@@ -1,10 +1,12 @@
-// Copyright 2020-2022 Paul Robertson
+// Copyright 2020-2023 Paul Robertson
 //
 // PeUtilities.h
 //
 // Print formatting, math and other utility functions
 
 #pragma once
+
+#include "PeDefinitions.h"
 
 #include <ctime>
 #include <iostream>
@@ -13,10 +15,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "PeDefinitions.h"
-
-namespace pe {
-namespace formatting {
+namespace pe
+{
+namespace formatting
+{
 
 const std::string kHeading1Dashes("--------");
 const std::string kHeading2Dashes("----");
@@ -30,12 +32,13 @@ std::string MethodHeader(int method_number);
 
 }; // namespace formatting
 
-namespace math {
+namespace math
+{
 const double kPhi = 1.6180339887499;
 
 const double kHalfPi = 1.5707963267949;
-const double kPi = 3.14159265358979;
-const double kTwoPi = 6.28318530717959;
+const double kPi     = 3.14159265358979;
+const double kTwoPi  = 6.28318530717959;
 
 // Generate a map of numbers to Collatz iterations for each number to reach 1.
 // Collatz iterations refers to the sequence defined in the Collatz Conjecture
@@ -66,7 +69,7 @@ std::vector<PeUint> CollatzSequence(const PeUint starting_value);
 //     9 < 10, so the digital sum of 123456789 is 9
 PeUint DigitalSum(PeUint num);
 
-// Return a vector containing all factors of <trial_number>,
+// Return a std::vector containing all factors of <trial_number>,
 // from 1...trial_number. O(sqrt(n)).
 std::vector<PeUint> Factors(PeUint trial_number);
 
@@ -82,23 +85,22 @@ PeUint FibonacciDirect(PeUint n);
 PeUint FibonacciExact(PeUint n);
 
 // Greatest common divisor
-template<typename T>
-typename std::enable_if<std::is_integral<T>::value, T>::type Gcd(T a, T b)
+template<typename T> typename std::enable_if<std::is_integral<T>::value, T>::type Gcd(T a, T b)
 {
-	// Alternative for a while (true)
-	// This could also be implemented using recursion,
-	// I've gone with looping here since the code is
-	// similarly clear (IMO) and this uses less of the
-	// call stack.
-    for (;;) {
-        if (a == 0) {
-			return b;
-		}
+    // Alternative for a while (true)
+    // This could also be implemented using recursion,
+    // I've gone with looping here since the code is
+    // similarly clear (IMO) and this uses less of the
+    // call stack.
+    for ( ;; ) {
+        if ( a == 0 ) {
+            return b;
+        }
         b %= a;
 
-        if (b == 0) {
-			return a;
-		}
+        if ( b == 0 ) {
+            return a;
+        }
         a %= b;
     }
 }
@@ -114,24 +116,27 @@ std::vector<PeUint> GeneratePrimesSundaram(PeUint limit);
 // Generate a Pythagorean triple determined by two integers (m, n) such that m > n.
 // If m <= n, they will be swapped. This method uses Euclid's formula:
 //		a = m^2 - n^2, b = 2*m*n, c = m^2 + n^2
-std::tuple<PeUint, PeUint, PeUint> GeneratePythagoreanEuclidTriple(
-	PeUint m, PeUint n, PeUint k = 1);
+std::tuple<PeUint, PeUint, PeUint> GeneratePythagoreanEuclidTriple(PeUint m, PeUint n, PeUint k = 1);
 
 // Parity checks
-inline bool IsEven(PeInt n) {
-	return !(n & 1);
+inline bool IsEven(PeInt n)
+{
+    return !(n & 1);
 }
 
-inline bool IsEven(PeUint n) {
-	return !(n & 1);
+inline bool IsEven(PeUint n)
+{
+    return !(n & 1);
 }
 
-inline bool IsOdd(PeInt n) {
-	return (n & 1);
+inline bool IsOdd(PeInt n)
+{
+    return (n & 1);
 }
 
-inline bool IsOdd(PeUint n) {
-	return (n & 1);
+inline bool IsOdd(PeUint n)
+{
+    return (n & 1);
 }
 
 // Test if three integers (a,b,c) are a Pythagorean triple
@@ -147,8 +152,8 @@ PeUint Lcm(PeUint a, PeUint b);
 PeUint NChooseK(PeUint n, PeUint k);
 
 // Return "radix buckets" of a number n with a given radix.
-// For radix = 10, this will simply be a vector with each separate
-// digit of n as one element of the vector e.g.
+// For radix = 10, this will simply be a std::vector with each separate
+// digit of n as one element of the std::vector e.g.
 //   n = 1234, radix = 10 returns {4, 3, 2, 1}
 // Note the "reverse order" which means element indices correspond
 // to the radix power for each bucket. For the above example,
@@ -193,9 +198,10 @@ PeUint SumOfSquaresOneToN(PeUint n);
 // The sum of squared integers: 1^3 + 2^3 + ... n^3
 // Uses the analytic formula sum = (n*n*(n+1)*(n+1))/4
 PeUint SumOfCubesOneToN(PeUint n);
-};
+}; // namespace math
 
-namespace profiling {
+namespace profiling
+{
 
 // Do a simple "time trial" of a function by running it for a fixed number of
 // trials with the same inputs to give a crude assessment of its relative
@@ -207,27 +213,25 @@ namespace profiling {
 //
 // This wold call "Method1(20)" 100 times and write the resulting time,
 // with a formatted header indicating this is method 1, to the stream std::cout.
-template<typename ReturnType, typename ...InputTypes>
-void TimeProfileFunction(int method_number,
-						 int number_of_trials,
-						 std::ostream &os,
-						 ReturnType (profile_func)(InputTypes...),
-						 InputTypes ...inputs)
+template<typename ReturnType, typename... InputTypes>
+void TimeProfileFunction(int method_number, int number_of_trials, std::ostream& os,
+                         ReturnType(profile_func)(InputTypes...), InputTypes... inputs)
 {
-	// Function timing itself
-	clock_t start_time(clock());
+    // Function timing itself
+    clock_t start_time(clock());
 
-	for (int i = 0; i < number_of_trials; ++i) {
-		profile_func(inputs...);
-	}
+    for ( int i = 0; i < number_of_trials; ++i ) {
+        profile_func(inputs...);
+    }
 
-	clock_t time_taken = clock() - start_time;
+    clock_t time_taken = clock() - start_time;
 
-	// Formatted output display
-	os << formatting::MethodHeader(method_number) << endl << endl <<
-		"Time average over " << number_of_trials << " trials: " <<
-		static_cast<long double>(time_taken) / static_cast<long double>(number_of_trials) << 
-		endl << endl;
+    // Formatted output display
+    os << formatting::MethodHeader(method_number) << std::endl
+       << std::endl
+       << "Time average over " << number_of_trials
+       << " trials: " << static_cast<long double>(time_taken) / static_cast<long double>(number_of_trials) << std::endl
+       << std::endl;
 }
 
 // Do a simple "time trial" of functions by running each one for a fixed number
@@ -241,27 +245,27 @@ void TimeProfileFunction(int method_number,
 // This would call "Method1(20)" 100 times, then call "Method2(20)" 100 times
 // and write the resulting time for each method, with a formatted header for each,
 // to the stream std::cout.
-template<typename ReturnType, typename ...InputTypes>
-void TimeProfileFunctions(int number_of_trials,
-							std::ostream &os,
-							const std::vector<ReturnType (*)(InputTypes...)> &profile_funcs,
-							InputTypes ...inputs)
+template<typename ReturnType, typename... InputTypes>
+void TimeProfileFunctions(int number_of_trials, std::ostream& os,
+                          const std::vector<ReturnType (*)(InputTypes...)>& profile_funcs, InputTypes... inputs)
 {
-	// Loop over each function passed in and do a time trial
-	for (size_t i_func = 0; i_func < profile_funcs.size(); ++i_func) {
-		// Function timing itself
-		clock_t start_time(clock());
-		for (int i_trials = 0; i_trials < number_of_trials; ++i_trials) {
-			(profile_funcs[i_func])(inputs...);
-		}
-		clock_t time_taken = clock() - start_time;
+    // Loop over each function passed in and do a time trial
+    for ( size_t i_func = 0; i_func < profile_funcs.size(); ++i_func ) {
+        // Function timing itself
+        clock_t start_time(clock());
+        for ( int i_trials = 0; i_trials < number_of_trials; ++i_trials ) {
+            (profile_funcs[i_func])(inputs...);
+        }
+        clock_t time_taken = clock() - start_time;
 
-		// Formatted output display
-		os << formatting::MethodHeader(i_func + 1) << endl << endl <<
-			"Time average over " << number_of_trials << " trials: " <<
-			static_cast<long double>(time_taken) / static_cast<long double>(number_of_trials) << 
-			endl << endl;
-	}
+        // Formatted output display
+        os << formatting::MethodHeader(i_func + 1) << std::endl
+           << std::endl
+           << "Time average over " << number_of_trials
+           << " trials: " << static_cast<long double>(time_taken) / static_cast<long double>(number_of_trials)
+           << std::endl
+           << std::endl;
+    }
 }
 
 // Convenience macro for profiling
@@ -275,22 +279,19 @@ void TimeProfileFunctions(int number_of_trials,
 //     #define PROFILE_INPUT_TYPES_ PeUint, PeUint, PeUint
 //     #define PROFILE_ARGS_ 1000, 3, 5
 //     PROFILE_SOLUTIONS(Method1, Method2)
-#define PROFILE_SOLUTIONS(PROBLEM_NAMESPACE_, ...) \
-ostream &PROBLEM_NAMESPACE_::ProfileSolutions(int n_trials, ostream &os) \
-{ \
-	os << formatting::ProfileHeader(kProblemNumber) << endl << endl; \
-\
-	const vector<PROFILE_RETURN_TYPE_ (*)(PROFILE_INPUT_TYPES_)> profile_funcs = { \
-		__VA_ARGS__ \
-	}; \
-\
-	profiling::TimeProfileFunctions<PROFILE_RETURN_TYPE_, PROFILE_INPUT_TYPES_>( \
-		n_trials, os, profile_funcs, PROFILE_ARGS_); \
-\
-	return os; \
-}
+#define PROFILE_SOLUTIONS(PROBLEM_NAMESPACE_, ...)                                                                     \
+    std::ostream& PROBLEM_NAMESPACE_::ProfileSolutions(int n_trials, std::ostream& os)                                 \
+    {                                                                                                                  \
+        os << formatting::ProfileHeader(kProblemNumber) << std::endl << std::endl;                                     \
+                                                                                                                       \
+        const std::vector<PROFILE_RETURN_TYPE_ (*)(PROFILE_INPUT_TYPES_)> profile_funcs = { __VA_ARGS__ };             \
+                                                                                                                       \
+        profiling::TimeProfileFunctions<PROFILE_RETURN_TYPE_, PROFILE_INPUT_TYPES_>(n_trials, os, profile_funcs,       \
+                                                                                    PROFILE_ARGS_);                    \
+                                                                                                                       \
+        return os;                                                                                                     \
+    }
 
 }; // namespace profiling
 
 }; // namespace pe
-

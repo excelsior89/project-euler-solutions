@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2020-2022 Paul Robertson
+# Copyright 2020-2023 Paul Robertson
 #
 # Build script for Linux
 #

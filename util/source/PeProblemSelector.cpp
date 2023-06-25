@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Paul Robertson
+// Copyright 2020-2023 Paul Robertson
 //
 // PeProblemSelector.cpp
 //
@@ -6,79 +6,77 @@
 
 #include "PeProblemSelector.h"
 
-#include "PeProblem1.h"
-#include "PeProblem2.h"
-#include "PeProblem3.h"
-#include "PeProblem4.h"
-#include "PeProblem5.h"
-#include "PeProblem6.h"
-#include "PeProblem7.h"
-#include "PeProblem8.h"
-#include "PeProblem9.h"
-#include "PeProblem10.h"
-#include "PeProblem11.h"
-#include "PeProblem12.h"
-#include "PeProblem13.h"
-#include "PeProblem14.h"
-#include "PeProblem15.h"
-#include "PeProblem16.h"
-#include "PeProblem17.h"
-#include "PeProblem18.h"
-#include "PeProblem19.h"
-#include "PeProblem20.h"
-#include "PeProblem21.h"
+#include "PeProblem001.h"
+#include "PeProblem002.h"
+#include "PeProblem003.h"
+#include "PeProblem004.h"
+#include "PeProblem005.h"
+#include "PeProblem006.h"
+#include "PeProblem007.h"
+#include "PeProblem008.h"
+#include "PeProblem009.h"
+#include "PeProblem010.h"
+#include "PeProblem011.h"
+#include "PeProblem012.h"
+#include "PeProblem013.h"
+#include "PeProblem014.h"
+#include "PeProblem015.h"
+#include "PeProblem016.h"
+#include "PeProblem017.h"
+#include "PeProblem018.h"
+#include "PeProblem019.h"
+#include "PeProblem020.h"
+#include "PeProblem021.h"
 
-using namespace std;
-
-namespace pe {
+namespace pe
+{
 PeProblemSelector::PeProblemSelector()
 {
-	problems_.push_back(make_unique<PeProblem1>());
-	problems_.push_back(make_unique<PeProblem2>());
-	problems_.push_back(make_unique<PeProblem3>());
-	problems_.push_back(make_unique<PeProblem4>());
-	problems_.push_back(make_unique<PeProblem5>());
-	problems_.push_back(make_unique<PeProblem6>());
-	problems_.push_back(make_unique<PeProblem7>());
-	problems_.push_back(make_unique<PeProblem8>());
-	problems_.push_back(make_unique<PeProblem9>());
-	problems_.push_back(make_unique<PeProblem10>());
-	problems_.push_back(make_unique<PeProblem11>());
-	problems_.push_back(make_unique<PeProblem12>());
-	problems_.push_back(make_unique<PeProblem13>());
-	problems_.push_back(make_unique<PeProblem14>());
-	problems_.push_back(make_unique<PeProblem15>());
-	problems_.push_back(make_unique<PeProblem16>());
-	problems_.push_back(make_unique<PeProblem17>());
-	problems_.push_back(make_unique<PeProblem18>());
-	problems_.push_back(make_unique<PeProblem19>());
-	problems_.push_back(make_unique<PeProblem20>());
-	problems_.push_back(make_unique<PeProblem21>());
+    problems_.push_back(std::make_unique<PeProblem001>());
+    problems_.push_back(std::make_unique<PeProblem002>());
+    problems_.push_back(std::make_unique<PeProblem003>());
+    problems_.push_back(std::make_unique<PeProblem004>());
+    problems_.push_back(std::make_unique<PeProblem005>());
+    problems_.push_back(std::make_unique<PeProblem006>());
+    problems_.push_back(std::make_unique<PeProblem007>());
+    problems_.push_back(std::make_unique<PeProblem008>());
+    problems_.push_back(std::make_unique<PeProblem009>());
+    problems_.push_back(std::make_unique<PeProblem010>());
+    problems_.push_back(std::make_unique<PeProblem011>());
+    problems_.push_back(std::make_unique<PeProblem012>());
+    problems_.push_back(std::make_unique<PeProblem013>());
+    problems_.push_back(std::make_unique<PeProblem014>());
+    problems_.push_back(std::make_unique<PeProblem015>());
+    problems_.push_back(std::make_unique<PeProblem016>());
+    problems_.push_back(std::make_unique<PeProblem017>());
+    problems_.push_back(std::make_unique<PeProblem018>());
+    problems_.push_back(std::make_unique<PeProblem019>());
+    problems_.push_back(std::make_unique<PeProblem020>());
+    problems_.push_back(std::make_unique<PeProblem021>());
 }
 
-
-ostream &PeProblemSelector::DisplayProblem(size_t problem_number, ostream &os)
+std::ostream& PeProblemSelector::DisplayProblem(size_t problem_number, std::ostream& os)
 {
-	if ((problem_number > 0) && (problem_number <= problems_.size())) {
-		--problem_number;
-		problems_[problem_number]->DisplayProblem(os);
-		problems_[problem_number]->DisplaySolution(os);
-	} else {
-		os << "Problem number " << problem_number << " not found." << endl;
-	}
+    if ( (problem_number > 0) && (problem_number <= problems_.size()) ) {
+        --problem_number;
+        problems_[problem_number]->DisplayProblem(os);
+        problems_[problem_number]->DisplaySolution(os);
+    } else {
+        os << "Problem number " << problem_number << " not found." << std::endl;
+    }
 
-	return os;
+    return os;
 }
 
-ostream &PeProblemSelector::ProfileProblem(size_t problem_number, int profile_n_trials, ostream &os)
+std::ostream& PeProblemSelector::ProfileProblem(size_t problem_number, int profile_n_trials, std::ostream& os)
 {
-	if ((problem_number > 0) && (problem_number <= problems_.size())) {
-		--problem_number;
-		problems_[problem_number]->ProfileSolutions(profile_n_trials, os);
-	} else {
-		os << "Problem number " << problem_number << " not found." << endl;
-	}
+    if ( (problem_number > 0) && (problem_number <= problems_.size()) ) {
+        --problem_number;
+        problems_[problem_number]->ProfileSolutions(profile_n_trials, os);
+    } else {
+        os << "Problem number " << problem_number << " not found." << std::endl;
+    }
 
-	return os;
+    return os;
 }
 }; // namespace pe

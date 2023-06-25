@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Paul Robertson
+# Copyright 2020-2023 Paul Robertson
 # Root CMake file for Project Euler solutions
 
 
